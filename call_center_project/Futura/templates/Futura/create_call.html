@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Call</title>
+    <style>
+        /* Add some basic styling */
+        form {
+            width: 50%;
+            margin: 20px auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="datetime-local"],
+        select,
+        textarea,
+        input[type="email"] { /* Add email input styling */
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <a href="{% url 'agent_overview' %}" class="return-button">Return to Welcome</a>
+    <h1>Create Call</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="agent">Agent:</label>
+        <input type="text" id="agent" name="agent" value="{{ user.username }}" readonly>
+
+        <label for="id_number">ID Number:</label>
+        <input type="text" id="id_number" name="id_number" required>
+
+        <label for="first_name">First Name:</label>
+        <input type="text" id="first_name" name="first_name" readonly>
+
+        <label for="surname">Surname:</label>
+        <input type="text" id="surname" name="surname" readonly>
+
+        <label for="phone_number">Phone Number:</label>
+        <select id="phone_number" name="phone_number" required>
+            <option value="">Select Phone Number</option>
+        </select>
+
+        <label for="start_time">Start Time of Call:</label>
+        <input type="datetime-local" id="start_time" name="start_time" required>
+
+        <label for="end_time">End Time of Call:</label>
+        <input type="datetime-local" id="end_time" name="end_time" required>
+
+        <label for="direction">Direction:</label>
+        <select id="direction" name="direction" required>
+            <option value="incoming">Incoming</option>
+            <option value="outbound">Outbound</option>
+        </select>
+
+        <label for="outcome">Outcome:</label>
+        <select id="outcome" name="outcome" required>
+            <option value="VM">VM</option>
+            <option value="n/a">n/a</option>
+            <option value="RPC">RPC</option>
+            <option value="WPC">WPC</option>
+            <option value="CPP">CPP</option>
+        </select>
+
+        <label for="call_result">Call Result:</label>
+        <select id="call_result" name="call_result" required>
+            <option value="VM">VM</option>
+            <option value="n/a">n/a</option>
+            <option value="PTP">PTP</option>
+            <option value="POP">POP</option>
+            <option value="ARR">ARR</option>
+            <option value="WPC">WPC</option>
+            <option value="CPP">CPP</option>
+        </select>
+
+        <label for="notes">Notes:</label>
+        <textarea id="notes" name="notes" rows="4"></textarea>
+
+        <label for="recipient_email">Recipient Email:</label>
+        <input type="email" id="recipient_email" name="recipient_email" required>
+
+        <label for="subject">Subject:</label>
+        <input type="text" id="subject" name="subject">
+
+        <label for="body">Body:</label>
+        <textarea id="body" name="body" rows="4"></textarea>
+
+        <label for="attachment">Attachment:</label>
+        <input type="file" id="attachment" name="attachment">
+
+        <button type="submit">Create Call</button>
+
+    </form>
+    <script>
+        const idNumberInput = document.getElementById('id_number');
+        idNumberInput.addEventListener('change', function(){
+            const idNumber = idNumberInput.value;
+            fetch(`/futura/get_client_details/?id_number=${idNumber}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('first_name').value = data.first_name || '';
+                    document.getElementById('surname').value = data.surname || '';
+                });
+
+            // Fetch phone numbers
+            fetch(`/futura/get_phone_numbers/?id_number=${idNumber}`)
+                .then(response => response.json())
+                .then(data => {
+                    const phoneNumberSelect = document.getElementById('phone_number');
+                    phoneNumberSelect.innerHTML = '<option value="">Select Phone Number</option>'; // Clear previous options
+                    data.phone_numbers.forEach(number => {
+                        const option = document.createElement('option');
+                        option.value = number;
+                        option.textContent = number;
+                        phoneNumberSelect.appendChild(option);
+                    });
+                });
+        });
+    </script>
+</body>
+</html>

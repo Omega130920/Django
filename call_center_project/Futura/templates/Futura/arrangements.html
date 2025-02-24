@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Arrangements</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .return-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            background-color: #4CAF50; /* Green background */
+            border: 1px solid #4CAF50; /* Green border */
+            border-radius: 5px;
+            text-decoration: none;
+            color: white; /* White text */
+            cursor: pointer;
+        }
+
+        .return-button:hover {
+            background-color: #3e8e41; /* Darker green on hover */
+            border: 1px solid #3e8e41;
+        }
+    </style>
+</head>
+<body>
+    <a href="{% url 'agent_overview' %}" class="return-button">Return to Agent Overview</a>
+    <h1>Arrangements</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID Number</th>
+                <th>First Name</th>
+                <th>Surname</th>
+                <th>Phone Number</th>
+                <th>Call Result</th>
+                <th>Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for arrangement in arrangements %}
+                <tr>
+                    <td>{{ arrangement.id_number }}</td>
+                    <td>{{ arrangement.first_name }}</td>
+                    <td>{{ arrangement.surname }}</td>
+                    <td>{{ arrangement.phone_number }}</td>
+                    <td>{{ arrangement.call_result }}</td>
+                    <td>{{ arrangement.notes }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

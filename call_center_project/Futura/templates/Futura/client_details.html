@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Client Details</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f0f0f0;
+        }
+
+        .return-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .return-button:hover {
+            background-color: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <a href="{% url 'agent_overview' %}" class="return-button">Return to Welcome</a>
+    <h1>Client Details</h1>
+
+    <form method="get">
+        <input type="text" name="id_number" placeholder="Enter ID Number">
+        <button type="submit">Filter</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Client</th>
+                <th>ID Number</th>
+                <th>Title</th>  <th>First Name</th>
+                <th>Surname</th>
+                <th>Contact Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in client_details_data %}
+                <tr>
+                    <td>{{ item.client.CLIENT }}</td>
+                    <td>{{ item.client.ID_Number }}</td>
+                    <td>{{ item.client.TITLE }}</td>  <td>{{ item.client.FIRST_NAME }}</td>
+                    <td>{{ item.client.SURNAME }}</td>
+                    <td>{{ item.contact_details }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

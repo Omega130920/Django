@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Client Information</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        th:nth-child(1) { width: 20%; } /* Client */
+        th:nth-child(2) { width: 15%; } /* ID Number */
+        th:nth-child(3) { width: 10%; } /* Title */
+        th:nth-child(4) { width: 20%; } /* First Name */
+        th:nth-child(5) { width: 20%; } /* Surname */
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f0f0f0;
+        }
+
+        .return-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            background-color: #4CAF50; /* Green background */
+            border: 1px solid #4CAF50; /* Green border */
+            border-radius: 5px;
+            text-decoration: none;
+            color: white; /* White text */
+            cursor: pointer;
+        }
+
+        .return-button:hover {
+            background-color: #3e8e41; /* Darker green on hover */
+            border: 1px solid #3e8e41;
+        }
+        .search-form {
+            margin-bottom: 20px;
+        }
+
+        .search-form label {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <a href="{% url 'agent_overview' %}" class="return-button">Return to Welcome</a>
+    <h1>Client Information</h1>
+
+    <form method="get" class="search-form">
+        <label for="search_id">ID Number:</label>
+        <input type="text" name="search_id" id="search_id" value="{{ request.GET.search_id }}">
+
+        <label for="search_first_name">First Name:</label>
+        <input type="text" name="search_first_name" id="search_first_name" value="{{ request.GET.search_first_name }}">
+
+        <label for="search_surname">Surname:</label>
+        <input type="text" name="search_surname" id="search_surname" value="{{ request.GET.search_surname }}">
+
+        <button type="submit">Search</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Client</th>
+                <th>ID Number</th>
+                <th>Title</th>
+                <th>First Name</th>
+                <th>Surname</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for client in clients %}
+            <tr onclick="window.location='{% url 'client_details' %}?id_number={{ client.ID_Number }}'">
+                <td>{{ client.CLIENT }}</td>
+                <td>{{ client.ID_Number }}</td>
+                <td>{{ client.TITLE }}</td>
+                <td>{{ client.FIRST_NAME }}</td>
+                <td>{{ client.SURNAME }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
