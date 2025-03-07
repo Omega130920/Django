@@ -14,5 +14,11 @@ urlpatterns = [
     path('get_client_details/', views.get_client_details, name='get_client_details'),
     path('get_phone_numbers/', views.get_phone_numbers, name='get_phone_numbers'),
     path('viewcalled/<str:id_number>/', views.viewcalled, name='viewcalled'),
-    path('call_list/', views.call_list, name='call_list'),   
+    path('call_list/', views.call_list, name='call_list'),
+    path('client_list_for_client/<str:id_number>/', views.client_list_for_client, name='client_list_for_client'),
+    path('arrangements_for_client/<str:id_number>/', views.arrangements_for_client, name='arrangements_for_client'),
+    path('create_call_for_client/<str:id_number>/', views.create_call_for_client, name='create_call_for_client'),
+    path('call_list_for_client/<str:id_number>/', views.call_list_for_client, name='call_list_for_client'),
+    path('recon/', views.recon_view, name='recon'),  # Corrected name here
+    path('arrangement_graph/', views.arrangement_graph, name='arrangement_graph'),
 ]

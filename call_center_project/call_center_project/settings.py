@@ -26,13 +26,14 @@ SECRET_KEY = 'django-insecure-&df*fond!=m5h497%1_ryo$v9#ju*g^oxk!z@=w+)t!xs)!qz&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# Update ALLOWED_HOSTS with your domain name
+ALLOWED_HOSTS = ['https://collections.futurasa.co.za', '127.0.0.1', 'localhost'] 
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'Futura',  # Add the app to the list of installed apps
+    'Futura',   # Add the app to the list of installed apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -77,8 +78,15 @@ WSGI_APPLICATION = 'call_center_project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db1.sqlite3'),  # Update this line
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'omega',
+        'USER': 'root',
+        'PASSWORD': '13Sept2020@',  # Replace with the actual passwordS
+        'HOST': 'localhost',  # Or '127.0.0.1'
+        'PORT': '3306',
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+        },
     }
 }
 
@@ -117,13 +125,24 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+
+# For production (add this later when deploying)
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Email settings for console backend
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-DEFAULT_FROM_EMAIL = 'your_default_email@example.com'  # Set the default from email
+# Email settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'luanoveck@gmail.com'
+EMAIL_HOST_PASSWORD = 'nmbbprvolaemqerv' 
+DEFAULT_FROM_EMAIL = 'luanoveck@gmail.com'

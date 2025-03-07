@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Call List</title>
+    <title>Client List</title>
     <style>
         table {
             width: 100%;
@@ -13,7 +13,7 @@
             text-align: left;
         }
         th {
-            background: linear-gradient(to bottom, #d1e2c4,rgb(143, 207, 127)); /* Soft gradient background */
+            background: linear-gradient(to bottom, #d1e2c4, rgb(143, 207, 127));
         }
         .return-button {
             display: inline-block;
@@ -31,35 +31,29 @@
             border: 1px solid #3e8e41;
         }
     </style>
+    </style>
 </head>
 <body>
-    <h1>Call List</h1>
-
-    <a href="{% url 'agent_overview' %}" class="return-button">Return to Agent Overview</a>
-    <form method="get">
-        {% csrf_token %}
-        <input type="text" name="search_id" placeholder="Enter ID Number">
-        <button type="submit">Filter</button>
-    </form>
-
+    <h1>Client List</h1>
+    {% if id_number %}
+        <a href="{% url 'client_details' %}?id_number={{ id_number }}" class="return-button">Return to Client Details</a>
+    {% endif %}
     <table>
         <thead>
             <tr>
-                <th>Client Name</th>
-                <th>ID Number</th>
+                <th>Client</th>
                 <th>Total Numbers</th>
                 <th>Called Count</th>
                 <th>Outstanding Numbers</th>
             </tr>
         </thead>
         <tbody>
-            {% for item in client_data %}
+            {% for data in client_data %}
                 <tr>
-                    <td>{{ item.client.CLIENT }}</td>
-                    <td>{{ item.client.ID_Number }}</td>
-                    <td>{{ item.total_numbers }}</td>
-                    <td>{{ item.called_count }}</td>
-                    <td>{{ item.outstanding_numbers }}</td>
+                    <td>{{ data.client.CLIENT }}</td>
+                    <td>{{ data.total_numbers }}</td>
+                    <td>{{ data.called_count }}</td>
+                    <td>{{ data.outstanding_numbers }}</td>
                 </tr>
             {% endfor %}
         </tbody>

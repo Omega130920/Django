@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Call List</title>
+    <title>Arrangements</title>
     <style>
         table {
             width: 100%;
@@ -13,7 +13,7 @@
             text-align: left;
         }
         th {
-            background: linear-gradient(to bottom, #d1e2c4,rgb(143, 207, 127)); /* Soft gradient background */
+            background: linear-gradient(to bottom, #d1e2c4, rgb(143, 207, 127));
         }
         .return-button {
             display: inline-block;
@@ -33,33 +33,30 @@
     </style>
 </head>
 <body>
-    <h1>Call List</h1>
-
-    <a href="{% url 'agent_overview' %}" class="return-button">Return to Agent Overview</a>
-    <form method="get">
-        {% csrf_token %}
-        <input type="text" name="search_id" placeholder="Enter ID Number">
-        <button type="submit">Filter</button>
-    </form>
-
+    <h1>Arrangements</h1>
+    {% if id_number %}
+        <a href="{% url 'client_details' %}?id_number={{ id_number }}" class="return-button">Return to Client Details</a>
+    {% endif %}
     <table>
         <thead>
             <tr>
-                <th>Client Name</th>
                 <th>ID Number</th>
-                <th>Total Numbers</th>
-                <th>Called Count</th>
-                <th>Outstanding Numbers</th>
+                <th>First Name</th>
+                <th>Surname</th>
+                <th>Phone Number</th>
+                <th>Call Result</th>
+                <th>Notes</th>
             </tr>
         </thead>
         <tbody>
-            {% for item in client_data %}
+            {% for arr in arrangements %}
                 <tr>
-                    <td>{{ item.client.CLIENT }}</td>
-                    <td>{{ item.client.ID_Number }}</td>
-                    <td>{{ item.total_numbers }}</td>
-                    <td>{{ item.called_count }}</td>
-                    <td>{{ item.outstanding_numbers }}</td>
+                    <td>{{ arr.id_number }}</td>
+                    <td>{{ arr.first_name }}</td>
+                    <td>{{ arr.surname }}</td>
+                    <td>{{ arr.phone_number }}</td>
+                    <td>{{ arr.call_result }}</td>
+                    <td>{{ arr.notes }}</td>
                 </tr>
             {% endfor %}
         </tbody>

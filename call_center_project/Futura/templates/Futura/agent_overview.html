@@ -4,58 +4,62 @@
     <title>Agent Overview</title>
     <style>
         body {
+            font-family: sans-serif;
+            margin: 0;
+            background: linear-gradient(to bottom, #d1e2c4, rgb(143, 207, 127));
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
+            align-items: center;
             min-height: 100vh;
-            margin: 0;
         }
 
         h1 {
-            font-size: 2.5em;
+            font-size: 3.5em;
             text-align: center;
             margin-bottom: 30px;
-            margin-top: 20px;
+            margin-top: 40px;
         }
 
         .button-container {
             display: grid;
-            grid-template-columns: repeat(2, 1fr); /* 3 columns */
-            gap: 10px; /* Space between buttons */
-            max-width: 900px; /* Adjust as needed */
-            margin: 0 auto; /* Center the buttons */
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            max-width: 1350px;
+            margin: 0 auto;
         }
 
         .button-block {
             padding: 100px 100px;
-            background-color: #4CAF50;
-            border: 1px solid #4CAF50;
+            background-color:rgb(119, 206, 97);
+            border: 1px solid: rgb(96, 98, 192);
             border-radius: 5px;
             text-align: center;
             cursor: pointer;
             text-decoration: none;
             color: white;
-            font-size: 1.5em;
+            font-size: 2.5em;
         }
 
         .button-block:hover {
-            background-color: #3e8e41;
-            border: 1px solid #3e8e41;
+            background-color:rgb(105, 187, 85);
+            border: 1px solid: rgb(105, 187, 85);
         }
     </style>
 </head>
 <body>
-</head>
-<body>
-    <h1>Welcome to Client Information</h1>  
-    <div class="container"></div>
+    <h1>Welcome to Client Information</h1>
     <div class="button-container">
         <a href="{% url 'client_information' %}" class="button-block">Client_information</a>
-        <a href="{% url 'client_details' %}" class="button-block">Client_details</a>
-        <a href="{% url 'client_list' %}" class="button-block">Client_list</a>
         <a href="{% url 'arrangements' %}" class="button-block">Arrangements</a>
         <a href="{% url 'create_call' %}" class="button-block">Create Call</a>
         <a href="{% url 'call_list' %}" class="button-block">Call List</a>
+        <a href="{% url 'recon' %}" class="button-block">Reconnaissance Tools</a>
+        <a href="{% url 'arrangement_graph' %}" class="button-block">Arrangement Graph</a>
+       <!--<a href="{% url 'client_list' %}" class="button-block">Client_list</a>--> 
     </div>
+    <footer>
+        <p>&copy; 2025 Luano van Eck</p> 
+    </footer>
 </body>
 </html>

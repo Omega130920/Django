@@ -13,7 +13,7 @@
             text-align: left;
         }
         th {
-            background: linear-gradient(to bottom, #d1e2c4,rgb(143, 207, 127)); /* Soft gradient background */
+            background: linear-gradient(to bottom, #d1e2c4, rgb(143, 207, 127));
         }
         .return-button {
             display: inline-block;
@@ -30,14 +30,14 @@
             background-color: #3e8e41;
             border: 1px solid #3e8e41;
         }
-       
+    </style>
     </style>
 </head>
 <body>
     <h1>Call List</h1>
-
-    <a href="{% url 'agent_overview' %}" class="return-button">Return to Agent Overview</a>
-
+    {% if id_number %}
+        <a href="{% url 'client_details' %}?id_number={{ id_number }}" class="return-button">Return to Client Details</a>
+    {% endif %}
     <table>
         <thead>
             <tr>
@@ -49,13 +49,7 @@
                 <th>Direction</th>
                 <th>Outcome</th>
                 <th>Call Result</th>
-                <th>Start Month</th>
-                <th>Day of Month</th>
-                <th>number_of_months</th>
-                <th>Installments</th>
                 <th>Notes</th>
-                <th>Recipient Email</th>
-                <th>Attachment Name</th>
             </tr>
         </thead>
         <tbody>
@@ -69,19 +63,10 @@
                     <td>{{ call.direction }}</td>
                     <td>{{ call.outcome }}</td>
                     <td>{{ call.call_result }}</td>
-                    <td>{{ call.start_month }}</td>
-                    <td>{{ call.day_of_month }}</td>
-                    <td>{{ call.number_of_months }}</td>
-                    <td>{{ call.installments }}</td>
                     <td>{{ call.notes }}</td>
-                    <td>{{ call.recipient_email }}</td>
-                    <td>{{ call.attachment_name }}</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
-    <footer>
-        <p>&copy; 2025 Luano van Eck</p> 
-    </footer>
 </body>
 </html>

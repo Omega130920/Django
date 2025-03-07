@@ -3,6 +3,7 @@
 <head>
     <title>Client Information</title>
     <style>
+        
         table {
             width: 100%;
             border-collapse: collapse;
@@ -10,20 +11,20 @@
         }
 
         th, td {
-            border: 1px solid #ddd;
+            border: 2px solid #ddd;
             padding: 8px;
-            text-align: left;
+            text-align: center;
         }
 
         th {
-            background-color: #f2f2f2;
+            background: linear-gradient(to bottom, #d1e2c4,rgb(143, 207, 127)); /* Soft gradient background */
         }
 
         th:nth-child(1) { width: 20%; } /* Client */
         th:nth-child(2) { width: 15%; } /* ID Number */
-        th:nth-child(3) { width: 10%; } /* Title */
-        th:nth-child(4) { width: 20%; } /* First Name */
-        th:nth-child(5) { width: 20%; } /* Surname */
+        th:nth-child(3) { width: 5%; } /* Title */
+        th:nth-child(4) { width: 15%; } /* First Name */
+        th:nth-child(5) { width: 15%; } /* Surname */
 
         tr:nth-child(even) {
             background-color: #f9f9f9;
@@ -63,6 +64,7 @@
     <h1>Client Information</h1>
 
     <form method="get" class="search-form">
+        {% csrf_token %}
         <label for="search_id">ID Number:</label>
         <input type="text" name="search_id" id="search_id" value="{{ request.GET.search_id }}">
 
@@ -97,5 +99,8 @@
             {% endfor %}
         </tbody>
     </table>
+    <footer>
+        <p>&copy; 2025 Luano van Eck</p> 
+    </footer>
 </body>
 </html>

@@ -99,6 +99,10 @@ class Call(models.Model):
     direction = models.CharField(max_length=10)
     outcome = models.CharField(max_length=10)
     call_result = models.CharField(max_length=10)
+    number_of_months = models.IntegerField(default=1)
+    installments = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    start_month = models.IntegerField(default=1)
+    day_of_month = models.IntegerField(default=1)
     notes = models.TextField(blank=True, null=True)
     recipient_email = models.CharField(max_length=255, null=True, blank=True)
     attachment_name = models.CharField(max_length=255, null=True, blank=True)
@@ -114,3 +118,14 @@ class Agent(models.Model):
 
     def __str__(self):
         return self.agent_name
+    
+class ClientPayment(models.Model):
+    id_number = models.CharField(max_length=20, null=True)  # Adjusted length
+    amount_deposited = models.DecimalField(max_digits=10, decimal_places=2, null=True)
+    statement_reference = models.CharField(max_length=255, null=True)
+    date_of_statement = models.DateField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)  # Keep created_at
+
+    def __str__(self):
+        return f"Payment: {self.id_number} - {self.date_of_statement}"
+    
