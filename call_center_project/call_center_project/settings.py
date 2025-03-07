@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-&df*fond!=m5h497%1_ryo$v9#ju*g^oxk!z@=w+)t!xs)!qz&
 DEBUG = True
 
 # Update ALLOWED_HOSTS with your domain name
-ALLOWED_HOSTS = ['https://collections.futurasa.co.za', '127.0.0.1', 'localhost'] 
+ALLOWED_HOSTS = ['https://collections.futurasa.co.za', '127.0.0.1', 'localhost','collections.futurasa.co.za','.futurasa.co.za'] 
 
 
 # Application definition
