@@ -31,7 +31,7 @@
 
         .button-block {
             padding: 100px 100px;
-            background-color:rgb(119, 206, 97);
+            background-color: rgb(119, 206, 97);
             border: 1px solid: rgb(96, 98, 192);
             border-radius: 5px;
             text-align: center;
@@ -42,13 +42,35 @@
         }
 
         .button-block:hover {
-            background-color:rgb(105, 187, 85);
+            background-color: rgb(105, 187, 85);
             border: 1px solid: rgb(105, 187, 85);
+        }
+
+        .logout-container {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .logout-button {
+            background-color: rgb(105, 187, 85);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
     <h1>Welcome to Client Information</h1>
+
+    <div class="logout-container">  <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="logout-button">Logout</button>
+        </form>
+    </div>
+
     <div class="button-container">
         <a href="{% url 'client_information' %}" class="button-block">Client_information</a>
         <a href="{% url 'arrangements' %}" class="button-block">Arrangements</a>
@@ -56,10 +78,10 @@
         <a href="{% url 'call_list' %}" class="button-block">Call List</a>
         <a href="{% url 'recon' %}" class="button-block">Reconnaissance Tools</a>
         <a href="{% url 'arrangement_graph' %}" class="button-block">Arrangement Graph</a>
-       <!--<a href="{% url 'client_list' %}" class="button-block">Client_list</a>--> 
+        <a href="{% url 'dashboard' %}" class="button-block">KPI</a>
     </div>
     <footer>
-        <p>&copy; 2025 Luano van Eck</p> 
+        <p>&copy; 2025 Luano van Eck</p>
     </footer>
 </body>
 </html>

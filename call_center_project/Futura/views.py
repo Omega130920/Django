@@ -27,7 +27,12 @@ import base64
 import io
 from django.conf import settings
 from django.core.mail import EmailMessage, send_mail
-
+from django.contrib.auth.models import User
+from django.template.loader import render_to_string
+import json
+from django.contrib.auth.views import PasswordResetConfirmView
+from django.db.models import Count, Sum
+from django.contrib.auth.models import User
 
 def home(request):
     print("Home view called!")
@@ -94,20 +99,21 @@ def client_details(request):
             # Fetch payment details
             try:
                 payment = ClientPayment.objects.filter(id_number=id_number).latest('created_at')
-                client_details_data[0]['last_payment_date'] = payment.date_of_statement
-                client_details_data[0]['last_payment_amount'] = payment.amount_deposited
+                client_details_data[0]['last_payment_date'] = payment.date_of_statement #Updated
+                client_details_data[0]['last_payment_amount'] = payment.amount_deposited #Updated
             except ClientPayment.DoesNotExist:
                 client_details_data[0]['last_payment_date'] = None
                 client_details_data[0]['last_payment_amount'] = None
-
+                
             try:
-                call = Call.objects.filter(id_number=id_number).latest('start_time')
+                call = Call.objects.filter(id_number=id_number).latest('start_time')  # Get the latest call
                 client_details_data[0]['number_of_months'] = call.number_of_months
                 client_details_data[0]['installments'] = call.installments
                 client_details_data[0]['start_month'] = call.start_month
                 client_details_data[0]['day_of_month'] = call.day_of_month
             except Call.DoesNotExist:
-                client_details_data[0]['number_of_months'] = "N/A"
+                # Handle case where no call data exists
+                client_details_data[0]['number_of_months'] = "N/A"  
                 client_details_data[0]['installments'] = "N/A"
                 client_details_data[0]['start_month'] = "N/A"
                 client_details_data[0]['day_of_month'] = "N/A"
@@ -155,8 +161,8 @@ def client_details(request):
                     'last_cred': "N/A",
                     'total_debt': "N/A",
                     'arr_exists': arr_exists,
-                    'last_payment_date': payment.date_of_statement,
-                    'last_payment_amount': payment.amount_deposited,
+                    'last_payment_date': payment.date_of_statement, #Updated
+                    'last_payment_amount': payment.amount_deposited, #Updated
                 })
             except ClientPayment.DoesNotExist:
                 client_details_data.append({
@@ -168,6 +174,7 @@ def client_details(request):
                     'last_payment_date': None,
                     'last_payment_amount': None,
                 })
+            
 
     return render(request, 'Futura/client_details.html', {'client_details_data': client_details_data})
 
@@ -771,3 +778,71 @@ def arrangement_graph(request):
 
     return render(request, 'arrangement_graph.html', {'graphic': graphic})
 
+def forgot_password(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        try:
+            user = User.objects.get(username=username)
+            # Generate a password reset token
+            from django.contrib.auth.tokens import PasswordResetTokenGenerator
+            token_generator = PasswordResetTokenGenerator()
+            token = token_generator.make_token(user)
+            reset_link = f"https://yourdomain.com/password_reset/{user.id}/{token.key}"
+
+            # Send the password reset email
+            subject = 'Password Reset Request'
+            message = render_to_string('password_reset_email.html', {'reset_link': reset_link, 'user': user})
+            from_email = settings.DEFAULT_FROM_EMAIL
+            recipient_list = ['luanoveck@gmail.com']  # Replace with the user's email
+            send_mail(subject, message, from_email, recipient_list, html_message=message)
+
+            return redirect('password_reset_sent')  # Redirect to a success page
+        except User.DoesNotExist:
+            # Handle the case where the username doesn't exist
+            return render(request, 'forgotpassword.html', {'error': 'Username not found.'})
+    else:
+        return render(request, 'forgotpassword.html')
+    
+def password_reset_sent(request):
+    return render(request, 'password_reset_sent.html')
+
+def dashboard(request):
+    # Get calls per month for each agent in 2025
+    calls_data = (
+        Call.objects.filter(start_time__year=2025)
+        .values("agent", "start_time__month")
+        .annotate(call_count=Count("id"))
+    )
+
+    # Get total installment value for each agent in 2025
+    installment_data = (
+        Call.objects.filter(start_time__year=2025)
+        .values("agent")
+        .annotate(total_installments=Sum("installments"))
+    )
+
+    # Prepare data for Chart.js
+    calls_by_agent = {}
+    for item in calls_data:
+        agent = item["agent"]
+        month = item["start_time__month"]
+        count = item["call_count"]
+        if agent not in calls_by_agent:
+            calls_by_agent[agent] = [0] * 12  # Initialize with 12 months
+        calls_by_agent[agent][month - 1] = count  # Month is 1-based
+
+    installment_values = {}
+    for item in installment_data:
+        agent = str(item["agent"])  # Convert agent to string
+        value = item["total_installments"]
+        installment_values[agent] = value
+
+    # Convert calls_by_agent to JSON
+    calls_by_agent_json = json.dumps(calls_by_agent)
+
+    context = {
+        "calls_by_agent": calls_by_agent,
+        "installment_values": installment_values,
+        "calls_by_agent_json": calls_by_agent_json,  # Add JSON data to context
+    }
+    return render(request, "dashboard.html", context)

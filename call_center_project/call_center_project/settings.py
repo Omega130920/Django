@@ -26,14 +26,14 @@ SECRET_KEY = 'django-insecure-&df*fond!=m5h497%1_ryo$v9#ju*g^oxk!z@=w+)t!xs)!qz&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# Update ALLOWED_HOSTS with your domain name
-ALLOWED_HOSTS = ['https://collections.futurasa.co.za', '127.0.0.1', 'localhost','collections.futurasa.co.za','.futurasa.co.za'] 
+# Update ALLOWED_HOSTS with your domain name or IP address when deploying
+ALLOWED_HOSTS = ['*']  # Your Wi-Fi IP address
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'Futura',   # Add the app to the list of installed apps
+    'Futura',  # Add the app to the list of installed apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,7 +46,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',  # CSRF middleware
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -57,7 +57,7 @@ ROOT_URLCONF = 'call_center_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'Futura/templates'), os.path.join(BASE_DIR, 'Futura/templates/futura')],  # Add this line
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -81,7 +81,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'omega',
         'USER': 'root',
-        'PASSWORD': '13Sept2020@',  # Replace with the actual passwordS
+        'PASSWORD': '13Sept2020@',  # Replace with the actual password
         'HOST': 'localhost',  # Or '127.0.0.1'
         'PORT': '3306',
         'OPTIONS': {
@@ -144,5 +144,9 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'luanoveck@gmail.com'
-EMAIL_HOST_PASSWORD = 'nmbbprvolaemqerv' 
+EMAIL_HOST_PASSWORD = 'ntbkazbkxohjocvo'
 DEFAULT_FROM_EMAIL = 'luanoveck@gmail.com'
+
+# Add these lines to set the secure and httponly flags for the session cookie
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_HTTPONLY = True
