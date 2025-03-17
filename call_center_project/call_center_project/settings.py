@@ -139,12 +139,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Email settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'smtp.gmail.com'  # This might need to be changed, see note below
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'luanoveck@gmail.com'
-EMAIL_HOST_PASSWORD = 'ntbkazbkxohjocvo'
-DEFAULT_FROM_EMAIL = 'luanoveck@gmail.com'
+EMAIL_HOST_USER = 'collections@thipaattorneys.co.za'
+EMAIL_HOST_PASSWORD = 'Y^038204287775uq'
+DEFAULT_FROM_EMAIL = 'collections@thipaattorneys.co.za'
 
 # Add these lines to set the secure and httponly flags for the session cookie
 SESSION_COOKIE_SECURE = False
