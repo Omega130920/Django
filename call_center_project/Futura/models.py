@@ -88,7 +88,7 @@ class ClientList(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'ClientList'
+        db_table = 'clientlist'
         
 class Call(models.Model):
     agent = models.TextField()
@@ -109,6 +109,9 @@ class Call(models.Model):
 
     def __str__(self):
         return f"Call: {self.id_number} - {self.start_time}"
+    
+    class Meta:
+        db_table = 'futura_call'  # Corrected to lowercase 'f' and 'c'
     
 class Agent(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)

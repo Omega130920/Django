@@ -3,15 +3,20 @@
 <head>
     <title>Agent Overview</title>
     <style>
+        html, body {
+            height: 100%; /* Ensure full viewport height */
+            margin: 0;
+            overflow: hidden; /* Prevent scrolling */
+        }
+
         body {
             font-family: sans-serif;
-            margin: 0;
             background: linear-gradient(to bottom, #d1e2c4, rgb(143, 207, 127));
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
             align-items: center;
-            min-height: 100vh;
+            min-height: 100vh; /* Use min-height for content to fit */
         }
 
         h1 {
@@ -32,7 +37,7 @@
         .button-block {
             padding: 100px 100px;
             background-color: rgb(119, 206, 97);
-            border: 1px solid: rgb(96, 98, 192);
+            border: 1px solid rgb(119, 206, 97);
             border-radius: 5px;
             text-align: center;
             cursor: pointer;
@@ -43,7 +48,7 @@
 
         .button-block:hover {
             background-color: rgb(105, 187, 85);
-            border: 1px solid: rgb(105, 187, 85);
+            border: 1px solid rgb(105, 187, 85);
         }
 
         .logout-container {
@@ -60,16 +65,25 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
+        footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            text-align: left;
+            padding: 10px 20px;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body>
     <h1>Welcome to Client Information</h1>
 
-    <div class="logout-container">  <form action="{% url 'logout' %}" method="post">
-            {% csrf_token %}
-            <button type="submit" class="logout-button">Logout</button>
-        </form>
-    </div>
+    <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="logout-button">Logout</button>
+    </form>
 
     <div class="button-container">
         <a href="{% url 'client_information' %}" class="button-block">Client_information</a>

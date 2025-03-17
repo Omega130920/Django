@@ -119,13 +119,14 @@
             border-color: #4cae4c;
             box-shadow: 0 0 8px rgba(92, 184, 92, 0.5);
         }
+        
     </style>
 </head>
 <body>
     <div class="container">
         {% if id_number %}
-            <a href="{% url 'client_details' %}?id_number={{ id_number }}" class="return-button">Return to Client Details</a>
-        {% endif %}
+        <a href="{% url 'client_details' %}?id_number={{ id_number }}" class="return-button">Return to Client Details</a>
+            {% endif %}
                 <h1>Create Call</h1>
                 <div class="agent-id-container">
                     <div>
@@ -139,28 +140,31 @@
                 </div>
         
                 <form method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
+                    {% csrf_token %}  <div class="agent-id-container">
+                        <div>
+                            <label for="agent">Agent:</label>
+                            <input type="text" id="agent" name="agent" value="{{ request.user.username }}" readonly>
+                        </div>
+                        <div>
+                            <label for="id_number">ID Number:</label>
+                            <input type="text" id="id_number" name="id_number" value="{{ client.ID_Number }}" readonly>
+                        </div>
+                    </div>
                     <input type="hidden" name="id_number" value="{{ client.ID_Number }}">
-        
-                    <div class="form-group"> 
+                    <div class="form-group">
                         <label for="phone_number">Phone Number:</label>
                         <select id="phone_number" name="phone_number" required>
                             <option value="">Select Phone Number</option>
                         </select>
                     </div>
-                <div>
-                </div>
-        
                     <div class="form-group">
                         <label for="start_time">Start Time of Call:</label>
                         <input type="datetime-local" id="start_time" name="start_time" required>
                     </div>
-        
                     <div class="form-group">
                         <label for="end_time">End Time of Call:</label>
                         <input type="datetime-local" id="end_time" name="end_time" required>
                     </div>
-        
                     <div class="form-group">
                         <label for="direction">Direction:</label>
                         <select id="direction" name="direction" required>
@@ -168,9 +172,6 @@
                             <option value="outbound">Outbound</option>
                         </select>
                     </div>
-                    <div>
-                    </div>
-        
                     <div class="form-group">
                         <label for="outcome">Outcome:</label>
                         <select id="outcome" name="outcome" required>
@@ -181,7 +182,6 @@
                             <option value="CPP">CPP</option>
                         </select>
                     </div>
-        
                     <div class="form-group">
                         <label for="call_result">Call Result:</label>
                         <select id="call_result" name="call_result" required>
@@ -199,9 +199,6 @@
                         <label for="notes">Notes:</label>
                         <textarea id="notes" name="notes" rows="4"></textarea>
                     </div>
-                    <div>
-                    </div>
-        
                     <div class="form-group">
                         <label for="number_of_months">total number_of_months:</label>
                         <select id="number_of_months" name="number_of_months" required>
@@ -219,15 +216,13 @@
                             <option value="12">12</option>
                         </select>
                     </div>
-        
                     <div class="form-group">
                         <label for="installments">installment_amount:</label>
                         <input type="number" id="installments" name="installments" step="0.01" required>
                     </div>
-        
                     <div class="form-group">
                         <label for="start_month">start of month:</label>
-                        <select id="start_month" name="start_month" required
+                        <select id="start_month" name="start_month" required>
                             <option value="1">Jan</option>
                             <option value="2">Feb</option>
                             <option value="3">Mar</option>
@@ -242,7 +237,6 @@
                             <option value="12">Dec</option>
                         </select>
                     </div>
-        
                     <div class="form-group">
                         <label for="day_of_month">collection date:</label>
                         <select id="day_of_month" name="day_of_month" required>
@@ -283,25 +277,20 @@
                         <label for="recipient_email">Recipient Email:</label>
                         <input type="email" id="recipient_email" name="recipient_email">
                     </div>
-        
                     <div class="form-group">
                         <label for="subject">Subject:</label>
                         <input type="text" id="subject" name="subject">
                     </div>
-        
                     <div class="form-group">
                         <label for="body">Body:</label>
                         <textarea id="body" name="body" rows="4"></textarea>
                     </div>
-        
                     <div class="form-group">
                         <label for="attachment">Attachment:</label>
                         <input type="file" id="attachment" name="attachment">
                     </div>
-        
                     <button type="submit">Create Call</button>
                 </form>
-
         <script>
             const idNumber = "{{ client.ID_Number }}";
 

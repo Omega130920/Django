@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
+from .views import custom_logout  # Add this line to import custom_logout
 
 urlpatterns = [  # Add this line if it is missing
     path('', views.login_view, name='login'),
@@ -21,10 +22,11 @@ urlpatterns = [  # Add this line if it is missing
     path('call_list_for_client/<str:id_number>/', views.call_list_for_client, name='call_list_for_client'),
     path('recon/', views.recon_view, name='recon'),
     path('arrangement_graph/', views.arrangement_graph, name='arrangement_graph'),
-    path('logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout'),
+    path('logout/', custom_logout, name='logout'),
     path('forgot_password/', views.forgot_password, name='forgot_password'),
     path('password_reset_sent/', views.password_reset_sent, name='password_reset_sent'),
     path('password_reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('password_reset/complete/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     path('dashboard/', views.dashboard, name='dashboard'),  # Add this line
+    
 ]

@@ -7,7 +7,7 @@ from django.utils import timezone
 from datetime import datetime
 from django.db.models import Q
 from django.db import connection
-from django.contrib.auth import authenticate , login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from django.core.mail import EmailMessage, send_mail
@@ -31,6 +31,7 @@ from django.contrib.auth.models import User
 from django.template.loader import render_to_string
 import json
 from django.contrib.auth.views import PasswordResetConfirmView
+from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Count, Sum
 from django.contrib.auth.models import User
 
@@ -47,8 +48,12 @@ def trace_results(request):
         db_table = 'Trace_result'
 @login_required
 def agent_overview(request):
+    if request.method == 'POST':  # Check if the form was submitted
+        logout(request)
+        return redirect('login')  # Redirect to login after logout
+
     username = request.user.username  # Get the username
-    return render(request, 'Futura/agent_overview.html', {'username': username})  # Pass the username
+    return render(request, 'Futura/agent_overview.html', {'username': username})
 
 def client_details(request):
     id_number = request.GET.get('id_number')
@@ -96,36 +101,49 @@ def client_details(request):
             arr_exists = Call.objects.filter(id_number=id_number, call_result='ARR').exists()
             client_details_data[0]['arr_exists'] = arr_exists
 
-            # Fetch payment details
             try:
                 payment = ClientPayment.objects.filter(id_number=id_number).latest('created_at')
-                client_details_data[0]['last_payment_date'] = payment.date_of_statement #Updated
-                client_details_data[0]['last_payment_amount'] = payment.amount_deposited #Updated
+                client_details_data[0]['last_payment_date'] = payment.date_of_statement
+                client_details_data[0]['last_payment_amount'] = payment.amount_deposited
             except ClientPayment.DoesNotExist:
                 client_details_data[0]['last_payment_date'] = None
                 client_details_data[0]['last_payment_amount'] = None
-                
+
             try:
-                call = Call.objects.filter(id_number=id_number).latest('start_time')  # Get the latest call
+                call = Call.objects.filter(id_number=id_number).latest('start_time')
                 client_details_data[0]['number_of_months'] = call.number_of_months
                 client_details_data[0]['installments'] = call.installments
                 client_details_data[0]['start_month'] = call.start_month
                 client_details_data[0]['day_of_month'] = call.day_of_month
             except Call.DoesNotExist:
-                # Handle case where no call data exists
-                client_details_data[0]['number_of_months'] = "N/A"  
+                client_details_data[0]['number_of_months'] = "N/A"
                 client_details_data[0]['installments'] = "N/A"
                 client_details_data[0]['start_month'] = "N/A"
                 client_details_data[0]['day_of_month'] = "N/A"
 
+            # Fetch arrangements and calls
+            arrangements = Call.objects.filter(id_number=id_number, call_result='ARR')
+            calls = Call.objects.filter(id_number=id_number)
+
+            # Add first_name and surname to arrangements
+            for arr in arrangements:
+                arr.first_name = client.FIRST_NAME
+                arr.surname = client.SURNAME
+
         except ClientList.DoesNotExist:
             client_details_data = []
+            arrangements = []
+            calls = []
         except TraceResult.DoesNotExist:
             client_details_data = [{'client': client, 'contact_details': "N/A", 'last_cred': "N/A", 'total_debt': "N/A", 'arr_exists': False}]
+            arrangements = []
+            calls = []
 
     else:
         clients = ClientList.objects.all()
         client_details_data = []
+        arrangements = []
+        calls = []
         for client in clients:
             trace_results = TraceResult.objects.filter(ID_Number=client.ID_Number)
             all_contact_numbers = []
@@ -135,15 +153,15 @@ def client_details(request):
                     result.cell_number, result.Home1, result.Work1, result.Cell1,
                     result.Home2, result.Work2, result.Cell2, result.Home3,
                     result.Work3, result.Cell3, result.Home4, result.Work4,
-                    result.Cell4, result.Home5, result.Work5, result.Cell5,
-                    result.Home6, result.Work6, result.Cell6, result.Home7,
-                    result.Work7, result.Cell7, result.Home8, result.Work8,
-                    result.Cell8, result.Home9, result.Work9, result.Cell9,
-                    result.Home10, result.Work10, result.Cell10, result.Home11,
-                    result.Work11, result.Cell11, result.Home12, result.Work12,
-                    result.Cell12, result.Home13, result.Work13, result.Cell13,
-                    result.Home14, result.Work14, result.Cell14, result.Home15,
-                    result.Work15, result.Cell15,
+                    result.Cell4, result.Home5, result.Cell5, result.Home6,
+                    result.Work6, result.Cell6, result.Home7, result.Work7,
+                    result.Cell7, result.Home8, result.Work8, result.Cell8,
+                    result.Home9, result.Work9, result.Cell9, result.Home10,
+                    result.Work10, result.Cell10, result.Home11, result.Work11,
+                    result.Cell11, result.Home12, result.Work12, result.Cell12,
+                    result.Home13, result.Work13, result.Cell13, result.Home14,
+                    result.Work14, result.Cell14, result.Home15, result.Work15,
+                    result.Cell15,
                     result.D_O_1, result.D_O_2, result.D_O_3, result.D_O_4, result.D_O_5,
                     result.D_O_6, result.D_O_7, result.D_O_8, result.D_O_9, result.D_O_10,
                     result.D_O_11, result.D_O_12, result.D_O_13, result.D_O_14, result.D_O_15,
@@ -161,8 +179,8 @@ def client_details(request):
                     'last_cred': "N/A",
                     'total_debt': "N/A",
                     'arr_exists': arr_exists,
-                    'last_payment_date': payment.date_of_statement, #Updated
-                    'last_payment_amount': payment.amount_deposited, #Updated
+                    'last_payment_date': payment.date_of_statement,
+                    'last_payment_amount': payment.amount_deposited,
                 })
             except ClientPayment.DoesNotExist:
                 client_details_data.append({
@@ -174,9 +192,13 @@ def client_details(request):
                     'last_payment_date': None,
                     'last_payment_amount': None,
                 })
-            
 
-    return render(request, 'Futura/client_details.html', {'client_details_data': client_details_data})
+    context = {
+        'client_details_data': client_details_data,
+        'arrangements': arrangements,
+        'calls': calls,
+    }
+    return render(request, 'Futura/client_details.html', context)
 
 @login_required
 def client_list(request):
@@ -302,7 +324,7 @@ def create_call(request):
             notes = request.POST.get('notes')
             recipient_email = request.POST.get('recipient_email')
             number_of_months = int(request.POST.get('number_of_months'))
-            installments = request.POST.get('installments') #check the type being passed.
+            installments = request.POST.get('installments')
             start_month = int(request.POST.get('start_month'))
             day_of_month = int(request.POST.get('day_of_month'))
 
@@ -315,18 +337,18 @@ def create_call(request):
             from_email = settings.EMAIL_HOST_USER
             recipient_list = [recipient_email]
 
+            attachment_name = None
             if 'attachment' in request.FILES:
                 attachment = request.FILES['attachment']
                 email = EmailMessage(subject, body, from_email, recipient_list)
                 email.attach(attachment.name, attachment.read(), attachment.content_type)
                 email.send()
-                attachment_name=attachment.name
-
+                attachment_name = attachment.name
             else:
                 send_mail(subject, body, from_email, recipient_list, fail_silently=False)
-                attachment_name=None
+                attachment_name = None
 
-            call = Call(
+            call_record = Call(
                 agent=agent,
                 id_number=id_number,
                 phone_number=phone_number,
@@ -343,15 +365,15 @@ def create_call(request):
                 start_month=start_month,
                 day_of_month=day_of_month,
             )
-            print(request.POST) #added print statement.
-            print(call.__dict__) #added print statement.
-            call.save()
+            print(request.POST)
+            print(call_record.__dict__)
+            call_record.save()
 
-            return redirect('agent_overview')
+            return redirect('agent_overview')  # Redirect for non-AJAX
 
         except Exception as e:
             print(f"Error sending email or saving call: {e}")
-            return HttpResponse(f"Error: {e}")
+            return HttpResponse(f"Error: {e}", status=500) # Return a standard error response
 
     return render(request, 'Futura/create_call.html')
 
@@ -846,3 +868,9 @@ def dashboard(request):
         "calls_by_agent_json": calls_by_agent_json,  # Add JSON data to context
     }
     return render(request, "dashboard.html", context)
+
+@csrf_exempt
+def custom_logout(request):
+    logout(request)
+    return redirect('login')  # Replace 'login' with your login URL name
+
