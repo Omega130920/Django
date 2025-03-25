@@ -126,6 +126,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
@@ -137,14 +138,13 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Email settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.office365.com'  # smtp.office365.com  smtp.gmail.com
+EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'collections@thipaattorneys.co.za'
-EMAIL_HOST_PASSWORD = 'Y^038204287775uq'
-DEFAULT_FROM_EMAIL = 'collections@thipaattorneys.co.za'
+EMAIL_HOST_USER = 'luanoveck@gmail.com'
+EMAIL_HOST_PASSWORD = 'eebuxhzgkcinyhkp'
+DEFAULT_FROM_EMAIL = 'luanoveck@gmail.com'
 
 # Add these lines to set the secure and httponly flags for the session cookie
 SESSION_COOKIE_SECURE = False

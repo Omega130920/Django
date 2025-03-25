@@ -28,6 +28,7 @@ import io
 from django.conf import settings
 from django.core.mail import EmailMessage, send_mail
 from django.contrib.auth.models import User
+from django.contrib import messages
 from django.template.loader import render_to_string
 import json
 from django.contrib.auth.views import PasswordResetConfirmView
@@ -48,11 +49,11 @@ def trace_results(request):
         db_table = 'Trace_result'
 @login_required
 def agent_overview(request):
-    if request.method == 'POST':  # Check if the form was submitted
+    if request.method == 'POST':
         logout(request)
-        return redirect('login')  # Redirect to login after logout
+        return redirect('login')
 
-    username = request.user.username  # Get the username
+    username = request.user.username
     return render(request, 'Futura/agent_overview.html', {'username': username})
 
 def client_details(request):
@@ -321,7 +322,7 @@ def create_call(request):
             direction = request.POST.get('direction')
             outcome = request.POST.get('outcome')
             call_result = request.POST.get('call_result')
-            notes = request.POST.get('notes')
+            notes = request.POST.get('Email')
             recipient_email = request.POST.get('recipient_email')
             number_of_months = int(request.POST.get('number_of_months'))
             installments = request.POST.get('installments')
@@ -690,7 +691,7 @@ def create_call_for_client(request, id_number):
         direction = request.POST.get('direction')
         outcome = request.POST.get('outcome')
         call_result = request.POST.get('call_result')
-        notes = request.POST.get('notes')
+        notes = request.POST.get('Email')
         recipient_email = request.POST.get('recipient_email')
         number_of_months = (request.POST.get('number_of_months'))
         installments = request.POST.get('installments') #check the type being passed.
@@ -874,3 +875,157 @@ def custom_logout(request):
     logout(request)
     return redirect('login')  # Replace 'login' with your login URL name
 
+def bulk_sms(request):
+    rpc_data = []
+    selected_date = None
+
+    if request.method == 'POST':
+        if 'fetch_rpc' in request.POST:
+            date_str = request.POST.get('call_date')
+            if date_str:
+                try:
+                    selected_date = datetime.strptime(date_str, '%Y-%m-%d').date()
+                    print(f"Selected date: {selected_date}")
+                    with connection.cursor() as cursor:
+                        query = """
+                            SELECT 
+                                fc.id_number,
+                                fc.outcome, 
+                                fc.phone_number
+                            FROM 
+                                futura_call fc
+                            WHERE 
+                                fc.outcome = 'RPC' AND 
+                                DATE(fc.start_time) = %s;
+                        """
+                        print(f"SQL Query: {query % (selected_date,)}")
+                        cursor.execute(query, [selected_date])
+                        columns = [col[0] for col in cursor.description]
+                        rpc_data = [dict(zip(columns, row)) for row in cursor.fetchall()]
+                        print(f"RPC Data: {rpc_data}")
+
+                    # Generate Customized SMS Message Body with id_number and add it to rpc_data
+                    for contact in rpc_data:
+                        contact['sms_message'] = f"Dear client, your ID number is: {contact['id_number']}. This is a reminder regarding your account. Please contact us urgently. Thank you, Thipa Attorneys."
+
+                except ValueError:
+                    messages.error(request, "Invalid date format. Please use YYYY-MM-DD.")
+                    return render(request, 'Futura/bulk_sms.html')
+                except Exception as e:
+                    error_message = f"Error fetching RPC data: {e}"
+                    messages.error(request, error_message)
+                    return render(request, 'Futura/bulk_sms.html')
+            else:
+                messages.error(request, "Please select a date.")
+                return render(request, 'Futura/bulk_sms.html')
+
+        elif 'send_sms' in request.POST:
+            # Fixed SMS Message Body - This should be defined *outside* the loop
+            fixed_sms_message = "Dear client, this is a reminder regarding your account. Please contact us urgently. Thank you, Thipa Attorneys."
+
+            # Send SMS logic here (replace with your actual SMS sending code)
+            for contact in rpc_data:  # Use the rpc_data fetched earlier
+                phone_number = contact['phone_number']
+                # Replace this with your SMS sending function:
+                send_sms(phone_number, fixed_sms_message)  # Use the fixed message
+                print(f"Pretending to send SMS to {phone_number}: {fixed_sms_message}")  # Debugging
+
+            messages.success(request, "Bulk SMS messages have been queued for sending.")
+
+    context = {
+        'rpc_data': rpc_data,
+        'selected_date': selected_date,
+    }
+    return render(request, 'Futura/bulk_sms.html', context)
+
+def send_sms(phone_number, message):
+    """
+    This is a placeholder function. 
+    Replace this with your actual SMS sending implementation 
+    using your chosen SMS provider's API or library.
+    """
+    print(f"Pretending to send SMS to {phone_number}: {message}")
+    return True
+
+
+def bulk_email(request):
+    email_data = []
+    selected_date = None
+
+    if request.method == 'POST':
+        if 'fetch_emails' in request.POST:  # Changed button name
+            date_str = request.POST.get('email_date')
+            if date_str:
+                try:
+                    selected_date = datetime.strptime(date_str, '%Y-%m-%d').date()
+                    print(f"Selected date: {selected_date}")
+                    with connection.cursor() as cursor:
+                        query = """
+                            SELECT 
+                                fc.id_number,
+                                fc.outcome,
+                                fc.recipient_email  -- Assuming this is the email column
+                            FROM 
+                                futura_call fc
+                            WHERE 
+                                fc.outcome = 'RPC' AND  -- Filter by outcome (adjust as needed)
+                                DATE(fc.start_time) = %s;
+                        """
+                        print(f"SQL Query: {query % (selected_date,)}")
+                        cursor.execute(query, [selected_date])
+                        columns = [col[0] for col in cursor.description]
+                        email_data = [dict(zip(columns, row)) for row in cursor.fetchall()]
+                        print(f"Email Data: {email_data}")
+
+                    # Generate Customized Email Message Body and Subject and add them to email_data
+                    email_subject = "Important Account Reminder"  # Fixed subject
+                    for contact in email_data:
+                        contact['email_message'] = f"Dear client, your ID number is: {contact['id_number']}. This is a reminder regarding your account. Please contact us urgently. Thank you, Thipa Attorneys."
+                        contact['email_subject'] = email_subject  # Add subject to each record
+
+                except ValueError:
+                    messages.error(request, "Invalid date format. Please use YYYY-MM-DD.")
+                    return render(request, 'Futura/bulk_email.html')
+                except Exception as e:
+                    error_message = f"Error fetching email data: {e}"
+                    messages.error(request, error_message)
+                    return render(request, 'Futura/bulk_email.html')
+            else:
+                messages.error(request, "Please select a date.")
+                return render(request, 'Futura/bulk_email.html')
+
+        elif 'send_emails' in request.POST:  # Changed button name
+            # Email sending logic here
+            for contact in email_data:
+                recipient_email = contact['recipient_email']  # Get email from data
+                email_subject = contact['email_subject']
+                email_message = contact['email_message']
+                try:
+                    # Replace this with your actual email sending function
+                    send_email(recipient_email, email_subject, email_message)  # Example call
+                    print(f"Pretending to send email to: {recipient_email}")  # Debugging
+                    # You would likely want to handle success/failure of the email sending
+                except Exception as e:
+                    messages.error(request, f"Error sending email to {recipient_email}: {e}")
+
+            messages.success(request, "Bulk emails have been queued for sending.")
+
+    context = {
+        'email_data': email_data,
+        'selected_date': selected_date,
+    }
+    return render(request, 'Futura/bulk_email.html', context)
+
+# Replace this with your actual email sending function
+def send_email(recipient_email, subject, message):
+    """
+    This is a placeholder function. 
+    Replace this with your actual email sending implementation 
+    using Django's send_mail or a library.
+    """
+    print(f"Pretending to send email to {recipient_email} with subject '{subject}' and message: {message}")
+    # Your email sending logic would go here
+    # You would typically use Django's send_mail function
+    # or a library for sending emails
+    # Return True if successful, False if failed (or raise an exception)
+    return True

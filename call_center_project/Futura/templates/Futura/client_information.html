@@ -3,59 +3,119 @@
 <head>
     <title>Client Information</title>
     <style>
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
+        body {
+            font-family: sans-serif;
+            background: linear-gradient(to bottom, #d1e2c4, rgb(143, 207, 127)); /* Original background */
+            margin: 20px;
+            color: #333;
         }
 
-        th, td {
-            border: 2px solid #ddd;
-            padding: 8px;
+        h1 {
+            color: #1b5e20; /* Dark green heading */
             text-align: center;
-        }
-
-        th {
-            background: linear-gradient(to bottom, #d1e2c4,rgb(143, 207, 127)); /* Soft gradient background */
-        }
-
-        th:nth-child(1) { width: 20%; } /* Client */
-        th:nth-child(2) { width: 15%; } /* ID Number */
-        th:nth-child(3) { width: 5%; } /* Title */
-        th:nth-child(4) { width: 15%; } /* First Name */
-        th:nth-child(5) { width: 15%; } /* Surname */
-
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        tr:hover {
-            background-color: #f0f0f0;
+            margin-bottom: 30px;
         }
 
         .return-button {
             display: inline-block;
             padding: 10px 20px;
             margin-bottom: 20px;
-            background-color: #4CAF50; /* Green background */
-            border: 1px solid #4CAF50; /* Green border */
+            background-color: #81c784; /* Muted green */
+            border: 1px solid #81c784;
             border-radius: 5px;
             text-decoration: none;
-            color: white; /* White text */
+            color: white;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
 
         .return-button:hover {
-            background-color: #3e8e41; /* Darker green on hover */
-            border: 1px solid #3e8e41;
+            background-color: #66bb6a; /* Darker muted green */
         }
+
         .search-form {
+            background-color: #f1f8e9; /* Very light green */
+            padding: 15px;
+            border-radius: 5px;
             margin-bottom: 20px;
+            border: 1px solid #dcedc8;
+            display: flex;
+            gap: 10px;
+            align-items: center;
         }
 
         .search-form label {
-            margin-right: 10px;
+            font-weight: bold;
+            color: #388e3c; /* Darker green label */
+        }
+
+        .search-form input[type="text"],
+        .search-form button {
+            padding: 8px;
+            border-radius: 3px;
+            border: 1px solid #c8e6c9; /* Light green border for inputs */
+        }
+
+        .search-form button {
+            background-color: #a5d6a7; /* Light green button */
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-form button:hover {
+            background-color: #8bc34a; /* Brighter green button on hover */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            border-radius: 5px;
+            overflow: hidden; /* For rounded corners on background */
+            background-color: #f0fff0; /* Very light green table background */
+            border: 1px solid #c3e6cb; /* Light green table border */
+        }
+
+        thead th {
+            background-color: #43a047; /* Medium green header */
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            border-bottom: 2px solid #388e3c;
+        }
+
+        tbody td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 2px solid #aed581; /* Darker green bottom border for cells */
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #e6ffe6; /* Even rows slightly lighter green */
+        }
+
+        tbody tr:hover {
+            background-color: #ccffcc; /* Even lighter green on row hover */
+            cursor: pointer;
+        }
+
+        tbody td:first-child {
+            text-align: left; /* Align Client to the left */
+            padding-left: 20px;
+        }
+
+        th:nth-child(1), td:nth-child(1) { width: 30%; } /* Adjust Client width */
+        th:nth-child(2), td:nth-child(2) { width: 20%; } /* Adjust ID Number width */
+        th:nth-child(3), td:nth-child(3) { width: 10%; } /* Adjust Title width */
+        th:nth-child(4), td:nth-child(4) { width: 20%; } /* Adjust First Name width */
+        th:nth-child(5), td:nth-child(5) { width: 20%; } /* Adjust Surname width */
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #777;
         }
     </style>
 </head>
@@ -100,7 +160,7 @@
         </tbody>
     </table>
     <footer>
-        <p>&copy; 2025 Luano van Eck</p> 
+        <p>&copy; 2025 Luano van Eck</p>
     </footer>
 </body>
 </html>

@@ -28,5 +28,6 @@ urlpatterns = [  # Add this line if it is missing
     path('password_reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('password_reset/complete/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     path('dashboard/', views.dashboard, name='dashboard'),  # Add this line
-    
+     path('agent_overview/bulk-sms/', views.bulk_sms, name='bulk_sms'),
+    path('agent_overview/bulk-email/', views.bulk_email, name='bulk_email'),
 ]

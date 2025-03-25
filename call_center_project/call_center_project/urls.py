@@ -17,9 +17,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from Futura import views  # Import your Futura views
+from django.conf.urls.static import static
+from django.conf import settings
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('futura/', include('Futura.urls')),
     path('', views.login_view, name='login'),
-]
+    # You already included 'Futura.urls' above, so this line is redundant:
+    # path('', include('Futura.urls')),
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
