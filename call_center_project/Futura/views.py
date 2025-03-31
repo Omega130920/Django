@@ -55,7 +55,6 @@ def agent_overview(request):
 
     username = request.user.username
     return render(request, 'Futura/agent_overview.html', {'username': username})
-
 def client_details(request):
     id_number = request.GET.get('id_number')
 
@@ -322,7 +321,7 @@ def create_call(request):
             direction = request.POST.get('direction')
             outcome = request.POST.get('outcome')
             call_result = request.POST.get('call_result')
-            notes = request.POST.get('Email')
+            notes = request.POST.get('notes')
             recipient_email = request.POST.get('recipient_email')
             number_of_months = int(request.POST.get('number_of_months'))
             installments = request.POST.get('installments')
@@ -691,7 +690,7 @@ def create_call_for_client(request, id_number):
         direction = request.POST.get('direction')
         outcome = request.POST.get('outcome')
         call_result = request.POST.get('call_result')
-        notes = request.POST.get('Email')
+        notes = request.POST.get('notes')
         recipient_email = request.POST.get('recipient_email')
         number_of_months = (request.POST.get('number_of_months'))
         installments = request.POST.get('installments') #check the type being passed.
