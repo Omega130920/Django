@@ -115,7 +115,7 @@
     
 </head>
 <body>
-    <h1>Welcome to Futura Dashboard {{ username }}</h1>
+    <h1>Welcome to Futura Dashboar {{ username }}</h1>
     <div class="logout-wrapper"> <form method="post" action="{% url 'logout' %}">
             {% csrf_token %}
             <button type="submit" class="logout-button">Logout</button>
