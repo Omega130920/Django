@@ -123,12 +123,15 @@ class Agent(models.Model):
         return self.agent_name
     
 class ClientPayment(models.Model):
-    id_number = models.CharField(max_length=20, null=True)  # Adjusted length
+    id_number = models.CharField(max_length=20, null=True)
     amount_deposited = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     statement_reference = models.CharField(max_length=255, null=True)
     date_of_statement = models.DateField(null=True)
-    created_at = models.DateTimeField(auto_now_add=True)  # Keep created_at
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Payment: {self.id_number} - {self.date_of_statement}"
+
+    class Meta:
+        db_table = 'client_payments'
     
