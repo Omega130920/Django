@@ -640,7 +640,7 @@ def recon_view(request):
     client_ids = [client.ID_Number for client in clients]
 
     with connection.cursor() as cursor:
-        cursor.execute("SELECT `ID NUMBER OF DEBTOR`, `TOTAL` FROM Debt_collection WHERE `ID NUMBER OF DEBTOR` IN %s", [tuple(client_ids)])
+        cursor.execute("SELECT `ID NUMBER OF DEBTOR`, `TOTAL` FROM debt_collection WHERE `ID NUMBER OF DEBTOR` IN %s", [tuple(client_ids)])
         debt_data = dict(cursor.fetchall())
 
     clients_data = []

@@ -77,7 +77,7 @@ class TraceResult(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'Trace_result'
+        db_table = 'trace_result'
         
 class ClientList(models.Model):
     CLIENT = models.TextField(blank=True, null=True)
