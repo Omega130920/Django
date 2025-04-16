@@ -88,7 +88,7 @@ def client_details(request):
             client_details_data = [{'client': client, 'contact_details': contact_details}]
 
             with connection.cursor() as cursor:
-                cursor.execute("SELECT `LAST CRED`, `TOTAL` FROM Debt_collection WHERE `ID NUMBER OF DEBTOR` = %s", [id_number])
+                cursor.execute("SELECT `LAST CRED`, `TOTAL` FROM omega_debt_collection WHERE `ID NUMBER OF DEBTOR` = %s", [id_number])
                 debt_data = cursor.fetchone()
 
             if debt_data:
