@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Client List</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background: linear-gradient(to bottom, #d1e2c4, rgb(143, 207, 127));
+        }
+        .return-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            background-color: #4CAF50;
+            border: 1px solid #4CAF50;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+            cursor: pointer;
+        }
+        .return-button:hover {
+            background-color: #3e8e41;
+            border: 1px solid #3e8e41;
+        }
+    </style>
+    </style>
+</head>
+<body>
+    <h1>Client List</h1>
+    {% if id_number %}
+        <a href="{% url 'client_details' %}?id_number={{ id_number }}" class="return-button">Return to Client Details</a>
+    {% endif %}
+    <table>
+        <thead>
+            <tr>
+                <th>Client</th>
+                <th>Total Numbers</th>
+                <th>Called Count</th>
+                <th>Outstanding Numbers</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in client_data %}
+                <tr>
+                    <td>{{ data.client.CLIENT }}</td>
+                    <td>{{ data.total_numbers }}</td>
+                    <td>{{ data.called_count }}</td>
+                    <td>{{ data.outstanding_numbers }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <footer>
+        <p>&copy; 2025 Luano van Eck</p> 
+    </footer>
+</body>
+</html>

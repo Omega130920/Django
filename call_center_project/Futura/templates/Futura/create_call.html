@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Call</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            background: linear-gradient(to bottom, #d1e2c4, rgb(143, 207, 127));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .container {
+            width: 80%;
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+        
+        .return-button {
+            display: inline-block;
+            background-color: #5cb85c;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .return-button:hover {
+            background-color: #4cae4c;
+        }
+        
+        form {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 15px;
+        }
+        
+        label {
+            text-align: right;
+            padding-right: 10px;
+            color: #333;
+        }
+        
+        input[type="text"],
+        input[type="datetime-local"],
+        select,
+        textarea,
+        input[type="email"],
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        
+        input[type="text"]:focus,
+        input[type="datetime-local"]:focus,
+        select:focus,
+        textarea:focus,
+        input[type="email"]:focus,
+        input[type="file"]:focus {
+            border-color: #5cb85c;
+            outline: none;
+            box-shadow: 0 0 5px rgba(92, 184, 92, 0.5);
+        }
+        
+        textarea {
+            resize: vertical;
+        }
+        
+        button {
+            background-color: #5cb85c;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            grid-column: 2 / 3;
+            justify-self: start;
+        }
+        
+        button:hover {
+            background-color: #4cae4c;
+        }
+        
+        input[type="checkbox"] {
+            margin-top: 10px;
+        }
+        
+        /* Styles for the installment amount input */
+        #installments {
+            border: 2px solid #5cb85c;
+            border-radius: 5px;
+            padding: 12px;
+            font-size: 16px;
+            width: 100%;
+            box-shadow: 0 0 5px rgba(92, 184, 92, 0.3);
+        }
+        
+        #installments:focus {
+            outline: none;
+            border-color: #4cae4c;
+            box-shadow: 0 0 8px rgba(92, 184, 92, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{% url 'agent_overview' %}" class="return-button">Return to Welcome</a>
+        <h1>Create Call</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="agent">Agent:</label>
+                <input type="text" id="agent" name="agent" value="{{ user.username }}" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="id_number">ID Number:</label>
+                <input type="text" id="id_number" name="id_number" required>
+            </div>
+            <div class="form-group">
+                <label for="first_name">First Name:</label>
+                <input type="text" id="first_name" name="first_name" readonly>
+            </div>
+            <div class="form-group">
+                <label for="surname">Surname:</label>
+                <input type="text" id="surname" name="surname" readonly>
+            </div>
+
+            <div class="form-group"> 
+                <label for="phone_number">Phone Number:</label>
+                <select id="phone_number" name="phone_number" required>
+                    <option value="">Select Phone Number</option>
+                </select>
+            </div>
+        <div>
+        </div>
+
+            <div class="form-group">
+                <label for="start_time">Start Time of Call:</label>
+                <input type="datetime-local" id="start_time" name="start_time" value="{{ current_datetime }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="end_time">End Time of Call:</label>
+                <input type="datetime-local" id="end_time" name="end_time" required>
+            </div>
+
+            <div class="form-group">
+                <label for="direction">Direction:</label>
+                <select id="direction" name="direction" required>
+                    <option value="incoming">Incoming</option>
+                    <option value="outbound">Outbound</option>
+                </select>
+            </div>
+            <div>
+            </div>
+
+            <div class="form-group">
+                <label for="outcome">Outcome:</label>
+                <select id="outcome" name="outcome" required>
+                    <option value="Promise to Pay">Promise to Pay</option>
+                            <option value="Right Party Contact - Email Sent">Right Party Contact - Email Sent</option>
+                            <option value="Right Party Contact">Right Party Contact</option>
+                            <option value="Refuse Debt rejected call - SMS Sent">Refuse Debt rejected call - SMS Sent</option>
+                            <option value="Call Rejected - SMS Sent">Call Rejected - SMS Sent</option>
+                            <option value="Call Rejected">Call Rejected</option>
+                            <option value="Not Contactable SMS Sent">Not Contactable SMS Sent</option>
+                            <option value="Not Contactable">Not Contactable</option>
+                            <option value="No Number/Does not exist">No Number/Does not exist</option>
+                            <option value="DECEASED">DECEASED</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="call_result">Call Result:</label>
+                <select id="call_result" name="call_result" required>
+                    <option value="Promise to Pay">Promise to Pay</option>
+                            <option value="Right Party Contact - Email Sent">Right Party Contact - Email Sent</option>
+                            <option value="Right Party Contact">Right Party Contact</option>
+                            <option value="Refuse Debt rejected call - SMS Sent">Refuse Debt rejected call - SMS Sent</option>
+                            <option value="Call Rejected - SMS Sent">Call Rejected - SMS Sent</option>
+                            <option value="Call Rejected">Call Rejected</option>
+                            <option value="Not Contactable SMS Sent">Not Contactable SMS Sent</option>
+                            <option value="Not Contactable">Not Contactable</option>
+                            <option value="No Number/Does not exist">No Number/Does not exist</option>
+                            <option value="DECEASED">DECEASED</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="notes">Notes:</label>
+                <textarea id="notes" name="notes" rows="4"></textarea>
+            </div>
+            <div>
+            </div>
+
+            <div class="form-group">
+                <label for="number_of_months">total number_of_months:</label>
+                <select id="number_of_months" name="number_of_months" required>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="installments">installment_amount:</label>
+                <input type="number" id="installments" name="installments" step="0.01">
+            </div>
+
+            <div class="form-group">
+                <label for="start_month">start of month:</label>
+                <select id="start_month" name="start_month" required>
+                    <option value="1">Jan</option>
+                    <option value="2">Feb</option>
+                    <option value="3">Mar</option>
+                    <option value="4">Apr</option>
+                    <option value="5">May</option>
+                    <option value="6">Jun</option>
+                    <option value="7">Jul</option>
+                    <option value="8">Aug</option>
+                    <option value="9">Sept</option>
+                    <option value="10">Oct</option>
+                    <option value="11">Nov</option>
+                    <option value="12">Dec</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="day_of_month">collection date:</label>
+                <select id="day_of_month" name="day_of_month" required>
+                    <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                            <option value="24">24</option>
+                            <option value="25">25</option>
+                            <option value="26">26</option>
+                            <option value="27">27</option>
+                            <option value="28">28</option>
+                            <option value="29">29</option>
+                            <option value="30">30</option>
+                            <option value="31">31</option>
+                </select>
+            </div>
+
+            <button type="submit">Create Call</button>
+        </form>
+        <script>
+            const idNumberInput = document.getElementById('id_number');
+            idNumberInput.addEventListener('change', function(){
+                const idNumber = idNumberInput.value;
+                fetch(`/futura/get_client_details/?id_number=${idNumber}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('first_name').value = data.first_name || '';
+                        document.getElementById('surname').value = data.surname || '';
+                    });
+
+                // Fetch phone numbers
+                fetch(`/futura/get_phone_numbers/?id_number=${idNumber}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const phoneNumberSelect = document.getElementById('phone_number');
+                        phoneNumberSelect.innerHTML = '<option value="">Select Phone Number</option>';
+                        data.phone_numbers.forEach(number => {
+                            const option = document.createElement('option');
+                            option.value = number;
+                            option.textContent = number;
+                            phoneNumberSelect.appendChild(option);
+                        });
+                    });
+            });
+        </script>
+    </div>
+    <footer>
+        <p>&copy; 2025 Luano van Eck</p> 
+    </footer>
+</body>
+</html>

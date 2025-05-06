@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reconnaissance Page</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            background: linear-gradient(to bottom, #d1e2c4, rgb(143, 207, 127));
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start; /* Align items to the top initially */
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+            color: #333;
+        }
+
+        .main-container {
+            width: 90%; /* Adjust width as needed */
+            max-width: 1200px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            margin: 30px auto; /* Add more top margin */
+            display: flex;
+            flex-direction: column;
+            align-items: stretch; /* Make children take full width */
+        }
+
+        /* Header Styles */
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .page-header h1 {
+            font-size: 2.5em;
+            color: #444;
+        }
+
+        /* Button Styles */
+        .return-button {
+            display: inline-block;
+            padding: 12px 24px;
+            margin-bottom: 20px;
+            background-color: #5cb85c;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .return-button:hover {
+            background-color: #5cb85c;
+            transform: translateY(-2px);
+        }
+
+        /* Table Styles */
+        .data-section {
+            overflow-x: auto;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px 10px;
+            text-align: left;
+            font-size: 1em; /* Adjusted font size */
+            white-space: nowrap; /* Prevent text wrapping in cells */
+        }
+
+        th {
+            background: #f5f5f5;
+            font-weight: bold;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9em; /* Adjusted font size for header */
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Bankline Form Styles */
+        #banklineForm {
+            display: none;
+            position: fixed;
+            top: 50%; /* Center vertically */
+            left: 50%; /* Center horizontally */
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 30px; /* Adjusted padding */
+            border: 1px solid #ccc; /* Reduced border */
+            border-radius: 8px; /* Adjusted border radius */
+            z-index: 1000;
+            width: 90%; /* Make it responsive */
+            max-width: 450px; /* Set a maximum width */
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3); /* Updated shadow */
+            font-size: 1em;
+            text-align: left;
+        }
+
+        #banklineForm h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        #banklineForm label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        #banklineForm input[type="text"],
+        #banklineForm input[type="date"] {
+            width: calc(100% - 16px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 1em;
+        }
+
+        #banklineForm button {
+            padding: 12px 20px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        #banklineForm button[type="submit"] {
+            background-color: #5cb85c; /* Green background for Submit */
+        }
+
+        #banklineForm button[type="submit"]:hover {
+            background-color: #4cae4c;
+        }
+
+        #banklineForm button[type="button"] {
+            background-color: #d9534f; /* Red background for Cancel */
+            margin-left: 10px;
+        }
+
+        #banklineForm button[type="button"]:hover {
+            background-color: #c9302c;
+        }
+
+        #banklineForm p {
+            margin-bottom: 15px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Footer Styles */
+        .page-footer {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 2px solid #ddd;
+            margin-top: 30px;
+            font-size: 0.9em;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <header class="page-header">
+            <h1>Client Outstanding Balance</h1>
+        </header>
+
+        <section>
+            <a href="{% url 'agent_overview' %}" class="return-button">Return to Welcome</a>
+        </section>
+
+        <section class="data-section">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID_Number</th>
+                        <th>Outstanding Balance</th>
+                        <th>Info</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for client_data in clients_data %}
+                        <tr>
+                            <td>{{ client_data.client.ID_Number }}</td>
+                            <td>{{ client_data.total_debt }}</td>
+                            <td><button onclick="showBanklineForm('{{ client_data.client.ID_Number }}')" class="return-button" style="padding: 8px 16px; font-size: 0.9em;">Open Bankline</button></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+        <div id="banklineForm">
+            <h2>Bankline Form</h2>
+            <p>ID Number: <span id="formIdNumberDisplay"></span></p>
+            <form id="banklineSubmitForm" method="post">
+                {% csrf_token %}
+                <input type="hidden" id="formIdNumber" name="id_number">
+                <label for="amountDeposited">Amount Deposited:</label>
+                <input type="text" id="amountDeposited" name="amountDeposited"><br>
+
+                <label for="statementReference">Statement Reference:</label>
+                <input type="text" id="statementReference" name="statementReference"><br>
+
+                <label for="dateOfStatement">Date of Statement:</label>
+                <input type="date" id="dateOfStatement" name="dateOfStatement"><br>
+
+                <button type="submit">Submit</button>
+                <button type="button" onclick="closeBanklineForm()">Cancel</button>
+            </form>
+        </div>
+
+        <footer class="page-footer">
+            <p>&copy; 2025 Luano van Eck</p>
+        </footer>
+    </div>
+
+    <script>
+        let currentIdNumber = '';
+
+        function showBanklineForm(idNumber) {
+            currentIdNumber = idNumber;
+            document.getElementById('formIdNumber').value = idNumber;
+            document.getElementById('formIdNumberDisplay').textContent = idNumber;
+            document.getElementById('banklineForm').style.display = 'block';
+        }
+
+        function closeBanklineForm() {
+            document.getElementById('banklineForm').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

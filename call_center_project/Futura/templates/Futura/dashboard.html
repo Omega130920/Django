@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <a href="{% url 'agent_overview' %}" class="return-button">Return to Welcome</a>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <style>
+        .chart-container {
+            width: 600px;
+            height: 400px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Dashboard</h1>
+
+    <h2>Calls per Month (2025)</h2>
+
+    <div class="chart-container">
+        <canvas id="calls-chart"></canvas>
+        <script>
+            var ctx = document.getElementById('calls-chart').getContext('2d');
+
+            // Get the data from the context and parse it as JSON
+            var callsData = JSON.parse('{{ calls_by_agent_json|escapejs }}');
+
+            // Prepare the data for the chart
+            var datasets = [];
+            var backgroundColor = ['rgba(54, 162, 235, 0.5)', 'rgba(255, 99, 132, 0.5)', 'rgba(255, 206, 86, 0.5)', 'rgba(75, 192, 192, 0.5)'];
+            var borderColor = ['rgba(54, 162, 235, 1)', 'rgba(255, 99, 132, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)'];
+            var colorIndex = 0;
+            for (var agent in callsData) {
+                datasets.push({
+                    label: agent,
+                    data: callsData[agent],
+                    backgroundColor: backgroundColor[colorIndex % backgroundColor.length],
+                    borderColor: borderColor[colorIndex % borderColor.length],
+                    borderWidth: 1
+                });
+                colorIndex++;
+            }
+
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: datasets
+                },
+                options: {
+                    plugins: {
+                        datalabels: {
+                            anchor: 'center',
+                            align: 'center',
+                            formatter: Math.round,
+                            font: {
+                                weight: 'bold'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            stacked: true
+                        },
+                        x: {
+                            stacked: true
+                        }
+                    }
+                }
+            });
+
+            // Add filter functionality
+            var agentFilter = document.getElementById('agent-filter');
+            agentFilter.addEventListener('change', function() {
+                var selectedAgent = this.value;
+                myChart.data.datasets.forEach(function(dataset) {
+                    dataset.hidden = selectedAgent !== '' && dataset.label !== selectedAgent;
+                });
+                myChart.update();
+            });
+        </script>
+    </div>
+
+    <select id="agent-filter">
+        <option value="">All Users</option>
+        {% for agent in calls_by_agent.keys %}
+            <option value="{{ agent }}">{{ agent }}</option>
+        {% endfor %}
+    </select>
+
+    <h2>Total Installment Value (2025)</h2>
+    <div class="chart-container">
+        <canvas id="installment-chart"></canvas>
+        <script>
+            var ctx2 = document.getElementById('installment-chart').getContext('2d');
+            var myChart2 = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: [{% for agent in installment_values.keys %}'{{ agent }}',{% endfor %}],
+                    datasets: [{
+                        label: 'Total Installments',
+                        data: [{% for value in installment_values.values %}{{ value }},{% endfor %}],
+                        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    plugins: {
+                        datalabels: {
+                            anchor: 'center',
+                            align: 'center',
+                            formatter: Math.round,
+                            font: {
+                                weight: 'bold'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        </script>
+    </div>
+</body>
+</html>

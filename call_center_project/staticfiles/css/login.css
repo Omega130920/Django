@@ -1,0 +1,110 @@
+html, body { /* Ensure full viewport height */
+    height: 100%;
+    margin: 0;
+    overflow: hidden; /* Prevent scrolling */
+}
+
+body {
+    font-family: sans-serif;
+    background: linear-gradient(to bottom, #d1e2c4, rgb(143, 207, 127));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Use min-height for content to fit */
+}
+
+.login-box {
+    background-color: rgba(205, 240, 190, 0.8);
+    border-radius: 15px;
+    padding: 40px;
+    width: 350px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.login-box h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.form-box {
+    text-align: left;
+}
+
+.form-box .input-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.form-box label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.form-box input {
+    width: 100%;
+    padding: 12px 40px 12px 15px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.form-box .input-group i {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    color: #888;
+}
+
+.form-box .remember-forgot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.form-box .remember-forgot label {
+    display: flex;
+    align-items: center;
+}
+
+.form-box .remember-forgot input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+.form-box button {
+    background-color: #f0f0f0;
+    color: #333;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 1em;
+}
+
+.form-box button:hover {
+    background-color: #e0e0e0;
+}
+
+.form-box a {
+    color: #555;
+    text-decoration: none;
+}
+
+.form-box a:hover {
+    text-decoration: underline;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: left;
+    padding: 10px 20px;
+    background-color: rgba(0, 0, 0, 0.1);
+}

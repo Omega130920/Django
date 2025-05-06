@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+
+<title>Futuras</title>
+<head>
+    <title>Client Details</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            /* More subtle and consistent green background */
+            background-color: #f0f8f0; /* Light pale green */
+            margin: 20px;
+            color: #333;
+        }
+
+        h1 {
+            color: #1b5e20;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .return-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            background-color: #81c784;
+            border: 1px solid #81c784;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .return-button:hover {
+            background-color: #66bb6a;
+            border-color: #66bb6a;
+        }
+
+        .action-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #81c784;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            border: 1px solid #81c784;
+            cursor: pointer;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .action-button:hover {
+            background-color: #66bb6a;
+            border-color: #66bb6a;
+        }
+
+        #table-container > div > table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: #f0fff0; /* Light green table background */
+            border: 1px solid #c3e6cb; /* Light green table border */
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        #table-container > div > table th,
+        #table-container > div > table td {
+            border: 1px solid #aed581; /* Darker green border for cells */
+            padding: 8px;
+            text-align: left;
+        }
+
+        #table-container > div > table th {
+            background: linear-gradient(to bottom, #d1e2c4, rgb(143, 207, 127));
+            font-weight: bold;
+            color: #333;
+        }
+
+        #table-container > div > table tr:nth-child(even) {
+            background-color: #e6ffe6; /* Even rows slightly lighter green */
+        }
+
+        #table-container > div > table tr:hover {
+            background-color: #ccffcc; /* Even lighter green on row hover */
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Style for the filter input */
+        form[method="get"] {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        form[method="get"] input[type="text"] {
+            padding: 8px;
+            border: 1px solid #c3e6cb;
+            border-radius: 3px;
+        }
+
+        form[method="get"] button[type="submit"] {
+            padding: 8px 15px;
+            background-color: #81c784;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        form[method="get"] button[type="submit"]:hover {
+            background-color: #66bb6a;
+        }
+    </style>
+</head>
+<body>
+    <a href="{% url 'agent_overview' %}" class="return-button">Return to Welcome</a>
+    <a href="{% url 'client_information' %}" class="return-button">Return to client_information</a>
+    <h1>Client Details</h1>
+
+    <div class="action-buttons">
+        <button data-table-id="client-list-table" class="action-button">Client list</button>
+        <button data-table-id="arrangements-table" class="action-button">Arrangements</button>
+        <button data-table-id="call-list-table" class="action-button">Call List</button>
+        {% if client_details_data.0.client.ID_Number %}
+        <a href="{% url 'create_call_for_client' client_details_data.0.client.ID_Number %}" class="action-button">Create Call</a>
+        {% endif %}
+    </div>
+
+    <div id="table-container">
+        <div id="client-list-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Client</th>
+                        <th>ID Number</th>
+                        <th>Title</th>
+                        <th>First Name</th>
+                        <th>Surname</th>
+                        <th>Total Debt</th>
+                        <th>Last call date</th>
+                        <th>Arrangement</th>
+                        <th>Last Payment date</th>
+                        <th>Last Payment amount</th>
+                        <th>day_of_month</th>
+                        <th>start_month</th>
+                        <th>number_of_months</th>
+                        <th>installments</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in client_details_data %}
+                        <tr>
+                            <td>{{ item.client.CLIENT }}</td>
+                            <td>{{ item.client.ID_Number }}</td>
+                            <td>{{ item.client.TITLE }}</td>
+                            <td>{{ item.client.FIRST_NAME }}</td>
+                            <td>{{ item.client.SURNAME }}</td>
+                            <td>{{ item.total_debt }}</td>
+                            <td>{{ item.last_cred }}</td>
+                            <td>{% if item.arr_exists %}Yes{% else %}No{% endif %}</td>
+                            <td>{{ item.last_payment_date|date:"Y-m-d" }}</td>
+                            <td>{{ item.last_payment_amount }}</td>
+                            <td>{{ item.day_of_month }}</td>
+                            <td>{{ item.start_month }}</td>
+                            <td>{{ item.number_of_months }}</td>
+                            <td>{{ item.installments }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr><td colspan="14">No client details found.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div id="arrangements-table" class="hidden">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID Number</th>
+                        <th>First Name</th>
+                        <th>Surname</th>
+                        <th>Phone Number</th>
+                        <th>Call Result</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if arrangements %}
+                        {% for arr in arrangements %}
+                            <tr>
+                                <td>{{ arr.id_number }}</td>
+                                <td>{{ arr.first_name }}</td>
+                                <td>{{ arr.surname }}</td>
+                                <td>{{ arr.phone_number }}</td>
+                                <td>{{ arr.call_result }}</td>
+                                <td>{{ arr.notes }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr><td colspan="6">No arrangements found for this client.</td></tr>
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+        <div id="call-list-table" class="hidden">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Agent</th>
+                        <th>ID Number</th>
+                        <th>Phone Number</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Direction</th>
+                        <th>Outcome</th>
+                        <th>Call Result</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if calls %}
+                        {% for call in calls %}
+                            <tr>
+                                <td>{{ call.agent }}</td>
+                                <td>{{ call.id_number }}</td>
+                                <td>{{ call.phone_number }}</td>
+                                <td>{{ call.start_time }}</td>
+                                <td>{{ call.end_time }}</td>
+                                <td>{{ call.direction }}</td>
+                                <td>{{ call.outcome }}</td>
+                                <td>{{ call.call_result }}</td>
+                                <td>{{ call.notes }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr><td colspan="9">No calls found for this client.</td></tr>
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Luano van Eck</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('.action-button[data-table-id]');
+            const tableContainer = document.getElementById('table-container');
+            const tables = tableContainer.querySelectorAll('div');
+
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const tableId = this.dataset.tableId;
+
+                    tables.forEach(table => {
+                        if (table.id === tableId) {
+                            table.classList.remove('hidden');
+                        } else {
+                            table.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

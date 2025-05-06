@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Information</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background: linear-gradient(to bottom, #d1e2c4, rgb(143, 207, 127));
+            margin: 20px;
+            color: #333;
+            line-height: 1.6; /* Improve text readability */
+        }
+
+        h1 {
+            color: #1b5e20;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .return-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            background-color: #81c784;
+            border: 1px solid #81c784;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .return-button:hover {
+            background-color: #66bb6a;
+        }
+
+        .search-form {
+            background-color: #f1f8e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #dcedc8;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .search-form label {
+            font-weight: bold;
+            color: #388e3c;
+        }
+
+        .search-form input[type="text"],
+        .search-form button {
+            padding: 8px;
+            border-radius: 3px;
+            border: 1px solid #c8e6c9;
+        }
+
+        .search-form button {
+            background-color: #a5d6a7;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-form button:hover {
+            background-color: #8bc34a;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+            background-color: #f0fff0;
+            border: 1px solid #c3e6cb;
+            margin-bottom: 20px; /* Add some space below the table */
+        }
+
+        thead th {
+            background-color: #43a047;
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            border-bottom: 2px solid #388e3c;
+            white-space: nowrap; /* Prevent header text from wrapping */
+        }
+
+        tbody td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #aed581; /* Lighter border */
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #e6ffe6;
+        }
+
+        tbody tr:hover {
+            background-color: #ccffcc;
+            cursor: pointer;
+        }
+
+        tbody td:first-child {
+            text-align: left;
+            padding-left: 20px;
+        }
+
+        /* Adjust column widths and prevent overflow */
+        th:nth-child(1), td:nth-child(1) { width: 5%; } /* [No.] - Reduced width */
+        th:nth-child(2), td:nth-child(2) { width: 25%; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } /* Client */
+        th:nth-child(3), td:nth-child(3) { width: 15%; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } /* ID Number */
+        th:nth-child(4), td:nth-child(4) { width: 10%; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } /* Title */
+        th:nth-child(5), td:nth-child(5) { width: 15%; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } /* First Name */
+        th:nth-child(6), td:nth-child(6) { width: 15%; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } /* Surname */
+        th:nth-child(7), td:nth-child(7) { width: 10%; max-width: 150px; overflow: hidden; text-overflow: ellipsis; text-align: right; white-space: nowrap; } /* Total Debt */
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #777;
+            font-size: 0.9em; /* Slightly smaller footer text */
+        }
+
+        .pagination {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .pagination a, .pagination span.current {
+            display: inline-block;
+            padding: 8px 12px;
+            margin: 0 5px;
+            border: 1px solid #ccc;
+            text-decoration: none;
+            border-radius: 3px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        .pagination a:hover {
+            background-color: #eee;
+        }
+
+        .pagination span.current {
+            background-color: #81c784;
+            color: white;
+            border-color: #81c784;
+        }
+
+        .pagination .disabled {
+            color: #777;
+            border-color: #ddd;
+            cursor: default;
+        }
+
+        .pagination .disabled:hover {
+            background-color: #f9f9f9;
+        }
+
+        /* Improve focus style for accessibility */
+        a:focus, button:focus, input:focus {
+            outline: 2px solid #558b2f;
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <a href="{% url 'agent_overview' %}" class="return-button">Return to Welcome</a>
+    <h1>Client Information</h1>
+
+    <form method="get" class="search-form">
+        {% csrf_token %}
+        <label for="search_id">ID Number:</label>
+        <input type="text" name="search_id" id="search_id" value="{{ request.GET.search_id }}">
+
+        <label for="search_first_name">First Name:</label>
+        <input type="text" name="search_first_name" id="search_first_name" value="{{ request.GET.search_first_name }}">
+
+        <label for="search_surname">Surname:</label>
+        <input type="text" name="search_surname" id="search_surname" value="{{ request.GET.search_surname }}">
+
+        <button type="submit">Search</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>[No.]</th>
+                <th>Client</th>
+                <th>ID Number</th>
+                <th>Title</th>
+                <th>First Name</th>
+                <th>Surname</th>
+                <th>Total Debt</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in debt_records_page %}
+            <tr onclick="window.location='{% url 'client_details' %}?id_number={{ item.id_number }}'">
+                <td>{{ item.debt_no }}</td>
+                <td>{{ item.client.CLIENT }}</td>
+                <td>{{ item.id_number }}</td>
+                <td>{{ item.client.TITLE }}</td>
+                <td>{{ item.client.FIRST_NAME }}</td>
+                <td>{{ item.client.SURNAME }}</td>
+                <td style="text-align: right;">{{ item.total_debt }}</td>
+            </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="7">No matching records found.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if debt_records_page.has_previous %}
+                <a href="?page=1{% if request.GET.search_id %}&search_id={{ request.GET.search_id }}{% endif %}{% if request.GET.search_first_name %}&search_first_name={{ request.GET.search_first_name }}{% endif %}{% if request.GET.search_surname %}&search_surname={{ request.GET.search_surname }}{% endif %}">&laquo; first</a>
+                <a href="?page={{ debt_records_page.previous_page_number }}{% if request.GET.search_id %}&search_id={{ request.GET.search_id }}{% endif %}{% if request.GET.search_first_name %}&search_first_name={{ request.GET.search_first_name }}{% endif %}{% if request.GET.search_surname %}&search_surname={{ request.GET.search_surname }}{% endif %}">previous</a>
+            {% else %}
+                <span class="disabled">&laquo; first</span>
+                <span class="disabled">previous</span>
+            {% endif %}
+
+            <span class="current">
+                Page {{ debt_records_page.number }} of {{ debt_records_page.paginator.num_pages }}.
+            </span>
+
+            {% if debt_records_page.has_next %}
+                <a href="?page={{ debt_records_page.next_page_number }}{% if request.GET.search_id %}&search_id={{ request.GET.search_id }}{% endif %}{% if request.GET.search_first_name %}&search_first_name={{ request.GET.search_first_name }}{% endif %}{% if request.GET.search_surname %}&search_surname={{ request.GET.search_surname }}{% endif %}">next</a>
+                <a href="?page={{ debt_records_page.paginator.num_pages }}{% if request.GET.search_id %}&search_id={{ request.GET.search_id }}{% endif %}{% if request.GET.search_first_name %}&search_first_name={{ request.GET.search_first_name }}{% endif %}{% if request.GET.search_surname %}&search_surname={{ request.GET.search_surname }}{% endif %}">last &raquo;</a>
+            {% else %}
+                <span class="disabled">next</span>
+                <span class="disabled">last &raquo;</span>
+            {% endif %}
+        </span>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Luano van Eck</p>
+    </footer>
+</body>
+</html>

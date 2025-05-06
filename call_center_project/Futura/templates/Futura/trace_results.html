@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Trace Results</title>
+</head>
+<body>
+    <h1>Trace Results</h1>
+    <ul>
+        {% for result in results %}
+            <li>{{ result.trace_id }} - {{ result.id_number }} - {{ result.cell_number }}</li>
+        {% endfor %}
+    </ul>
+    <footer>
+        <p>&copy; 2025 Luano van Eck</p> 
+    </footer>
+</body>
+</html>

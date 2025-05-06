@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Called Numbers</title>
+    <style>
+        /* Add basic styling */
+    </style>
+</head>
+<body>
+    <h1>Called Numbers for ID: {{ id_number }}</h1>
+    <ul>
+        {% for number in called_numbers %}
+        <li>{{ number }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'client_list' %}">Back to Client List</a>
+    <footer>
+        <p>&copy; 2025 Luano van Eck</p> 
+    </footer>
+</body>
+</html>

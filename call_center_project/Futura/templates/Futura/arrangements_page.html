@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Arrangements</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            background: linear-gradient(to bottom, #d1e2c4, rgb(143, 207, 127));
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+            color: #333;
+        }
+
+        .main-container {
+            width: 80%;
+            max-width: 1200px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            margin: 20px auto;
+        }
+
+        /* Header Styles */
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .page-header h1 {
+            font-size: 2.5em;
+            color: #444;
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 14px 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #f5f5f5;
+            font-weight: bold;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Return Button Styles */
+        .return-button {
+            display: inline-block;
+            padding: 14px 28px;
+            margin-bottom: 20px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .return-button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        /* Footer Styles */
+        .page-footer {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 2px solid #ddd;
+            margin-top: 30px;
+            font-size: 0.9em;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <header class="page-header">
+            <h1>Arrangements</h1>
+        </header>
+
+        <section class="data-section">
+            {% if id_number %}
+                <a href="{% url 'client_details' %}?id_number={{ id_number }}" class="return-button">Return to Client Details</a>
+            {% endif %}
+            <div class="data-table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID Number</th>
+                            <th>First Name</th>
+                            <th>Surname</th>
+                            <th>Phone Number</th>
+                            <th>Call Result</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for arr in arrangements %}
+                            <tr>
+                                <td>{{ arr.id_number }}</td>
+                                <td>{{ arr.first_name }}</td>
+                                <td>{{ arr.surname }}</td>
+                                <td>{{ arr.phone_number }}</td>
+                                <td>{{ arr.call_result }}</td>
+                                <td>{{ arr.notes }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+            </div>
+        </section>
+
+        <footer class="page-footer">
+            <p>&copy; 2025 Luano van Eck</p>
+        </footer>
+    </div>
+</body>
+</html>

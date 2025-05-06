@@ -1,0 +1,60 @@
+
+{% block content %}
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #f0f8ff; /* Very light blue/off-white */
+            margin: 20px;
+            color: #333;
+        }
+
+        h1 {
+            color: #2e7d32; /* Darker green */
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .return-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            background-color: #4caf50; /* Solid medium green */
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .return-button:hover {
+            background-color: #388e3c; /* Darker green on hover */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        img {
+            display: block;
+            margin: 20px auto; /* Center the image */
+            max-width: 90%; /* Responsive image width */
+            height: auto;
+            border: 1px solid #d0d0d0; /* Subtle border */
+            border-radius: 8px; /* Rounded corners for image */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #777;
+        }
+    </style>
+
+    <h1>Arrangement Graph</h1>
+    <a href="{% url 'agent_overview' %}" class="return-button">Return to Welcome</a>
+    <img src="data:image/png;base64,{{ graphic }}" alt="Arrangement Graph">
+{% endblock %}
+
+<footer>
+    <p>&copy; 2025 Luano van Eck</p>
+</footer>

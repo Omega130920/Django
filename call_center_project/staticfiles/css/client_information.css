@@ -1,0 +1,116 @@
+body {
+    font-family: sans-serif;
+    background: linear-gradient(to bottom, #d1e2c4, rgb(143, 207, 127));
+    margin: 20px;
+    color: #333;
+}
+
+h1 {
+    color: #1b5e20;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.return-button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    background-color: #81c784;
+    border: 1px solid #81c784;
+    border-radius: 5px;
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.return-button:hover {
+    background-color: #66bb6a;
+}
+
+.search-form {
+    background-color: #f1f8e9;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    border: 1px solid #dcedc8;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.search-form label {
+    font-weight: bold;
+    color: #388e3c;
+}
+
+.search-form input[type="text"],
+.search-form button {
+    padding: 8px;
+    border-radius: 3px;
+    border: 1px solid #c8e6c9;
+}
+
+.search-form button {
+    background-color: #a5d6a7;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-form button:hover {
+    background-color: #8bc34a;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+    background-color: #f0fff0;
+    border: 1px solid #c3e6cb;
+}
+
+thead th {
+    background-color: #43a047;
+    color: white;
+    padding: 12px;
+    text-align: center;
+    font-weight: bold;
+    border-bottom: 2px solid #388e3c;
+}
+
+tbody td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 2px solid #aed581;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #e6ffe6;
+}
+
+tbody tr:hover {
+    background-color: #ccffcc;
+    cursor: pointer;
+}
+
+tbody td:first-child {
+    text-align: left;
+    padding-left: 20px;
+}
+
+/* Adjust column widths as needed */
+th:nth-child(1), td:nth-child(1) { width: 25%; }
+th:nth-child(2), td:nth-child(2) { width: 15%; }
+th:nth-child(3), td:nth-child(3) { width: 10%; }
+th:nth-child(4), td:nth-child(4) { width: 15%; }
+th:nth-child(5), td:nth-child(5) { width: 15%; }
+th:nth-child(6), td:nth-child(6) { width: 20%; }
+
+footer {
+    text-align: center;
+    margin-top: 20px;
+    color: #777;
+}

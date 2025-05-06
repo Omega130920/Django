@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}My Site{% endblock %}</title>
+    {% csrf_token %} <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="logout-button">Logout</button>
+    </form>
+</head>
+<body>
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

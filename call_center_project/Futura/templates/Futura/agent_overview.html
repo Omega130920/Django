@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Agent Overview</title>
+    <style>
+        html, body {
+            height: auto;
+            margin: 0;
+            overflow-x: hidden;
+        }
+    
+        body {
+            font-family: sans-serif;
+            background: linear-gradient(to bottom, #d1e2c4, rgb(143, 207, 127));
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+    
+        h1 {
+            font-size: 3.5em;
+            text-align: center;
+            margin-bottom: 30px;
+            margin-top: 40px;
+            width: 100%;
+        }
+    
+        .button-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* Try forcing 3 columns */
+            grid-auto-rows: minmax(100px, auto);
+            gap: 15px;
+            max-width: 900px; /* Adjust max-width based on 3 columns */
+            width: 95%;
+            margin: 20px auto;
+        }
+    
+        /* Adjust grid for smaller screens using media queries */
+        @media (max-width: 768px) {
+            .button-container {
+                grid-template-columns: repeat(2, 1fr); /* Switch to 2 columns */
+                max-width: 600px; /* Adjust max-width */
+            }
+        }
+    
+        @media (max-width: 480px) {
+            .button-container {
+                grid-template-columns: 1fr; /* Switch to 1 column */
+                max-width: 300px; /* Adjust max-width */
+            }
+        }
+    
+        .button-block {
+            padding: 50px 20px; /* Adjust padding */
+            background-color: rgb(119, 206, 97);
+            border: 1px solid rgb(119, 206, 97);
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            font-size: 1.6em;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s ease, border-color 0.3s ease; /* Add transition for smoother effect */
+        }
+    
+        .button-block:hover {
+            background-color: rgb(105, 187, 85);
+            border: 1px solid rgb(105, 187, 85);
+        }
+    
+        .logout-wrapper { /* New wrapper div */
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+        }
+
+        .logout-button {
+            background-color: rgb(105, 187, 85);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+            /* Reset form styles that might interfere */
+            margin: 0;
+            display: inline-block; /* Treat it as an inline element */
+        }
+
+        .logout-button:hover {
+            background-color: darkgreen; /* Or any other desired hover color */
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            text-align: left;
+            padding: 10px 20px;
+            background-color: rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+        }
+    </style>
+    
+</head>
+<body>
+    <h1>Welcome to Futura Dashboar {{ username }}</h1>
+    <div class="logout-wrapper"> <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="logout-button">Logout</button>
+        </form>
+    </div>
+
+    <div class="button-container">
+        <a href="{% url 'client_information' %}" class="button-block">Client information</a>
+        <a href="{% url 'arrangements' %}" class="button-block">Arrangements</a>
+        <a href="{% url 'create_call' %}" class="button-block">Create Call</a>
+        <a href="{% url 'call_list' %}" class="button-block">Call List</a>
+        <a href="{% url 'recon' %}" class="button-block">Reconnaissance Tools</a>
+        <!--<a href="{% url 'arrangement_graph' %}" class="button-block">Arrangement Graph</a>-->
+        <!--<a href="{% url 'dashboard' %}" class="button-block">KPI</a>-->
+        <a href="{% url 'bulk_sms' %}" class="button-block">Send Bulk SMS</a>
+        <a href="{% url 'bulk_email' %}" class="button-block">Send Bulk Email</a>
+    </div>
+    <footer>
+        <p>&copy; 2025 Luano van Eck</p>
+    </footer>
+</body>
+</html>
